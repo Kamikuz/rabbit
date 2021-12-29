@@ -23,4 +23,7 @@ jobs:
         run: mvn -B package --file pom.xml
         env:
           X_KAIHEILA_API_TOKEN: ${{ secrets.X_KAIHEILA_API_TOKEN }}
+          
+      - name: Publish package
+        run: mvn deploy
 
