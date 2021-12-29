@@ -81,7 +81,7 @@ public class WebSocketSessionFileBaseStorage implements WebSocketSessionStorage 
             return null;
         }
         BufferedReader reader = new BufferedReader(fileReader);
-        try (reader) {
+        try {
             dataLine = reader.readLine();
         } catch (IOException ignored) {
             return null;

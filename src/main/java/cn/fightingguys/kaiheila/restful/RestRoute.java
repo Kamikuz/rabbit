@@ -2,6 +2,7 @@ package cn.fightingguys.kaiheila.restful;
 
 import cn.fightingguys.kaiheila.client.http.HttpMethod;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -459,8 +460,14 @@ public class RestRoute {
             }
             StringBuilder queryString = new StringBuilder();
             queryParams.forEach((k, v) -> {
-                String keyEnc = URLEncoder.encode(k, StandardCharsets.UTF_8);
-                String valEnc = URLEncoder.encode(String.valueOf(v), StandardCharsets.UTF_8);
+                String keyEnc = null;
+                String valEnc = null;
+                try {
+                    keyEnc = URLEncoder.encode(k, "UTF-8");
+                    valEnc = URLEncoder.encode(String.valueOf(v), "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
                 queryString.append('&').append(keyEnc).append('=').append(valEnc);
             });
             queryString.deleteCharAt(0);

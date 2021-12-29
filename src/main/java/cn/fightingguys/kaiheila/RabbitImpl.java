@@ -82,10 +82,7 @@ public class RabbitImpl implements Rabbit {
                 Log.error("用户Token无效，请检查当前是否可用");
                 return false;
             }
-            Log.info("缓存开始刷新");
             this.cacheManager.updateCache();
-            Log.info("缓存更新完成");
-            Log.info("事件处理初始化");
             this.eventManager.initializeEventSource();
         }
         botLogged = true;

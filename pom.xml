@@ -22,14 +22,14 @@
 
     <groupId>cn.fightingguys.kaiheila</groupId>
     <artifactId>rabbit</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <name>rabbit</name>
     <url>https://fightingguys.cn</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
     </properties>
 
     <developers>
@@ -37,6 +37,12 @@
             <name>Hu Yikai</name>
             <email>running_hyk@hotmail.com</email>
             <url>https://fightingguys.cn</url>
+        </developer>
+
+        <developer>
+            <name>Kamiku</name>
+            <email>kamiku@kamikuz.cn</email>
+            <url>https://kamikuz.cn</url>
         </developer>
     </developers>
 
@@ -50,7 +56,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.13.0</version>
+            <version>2.13.1</version>
         </dependency>
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
@@ -60,13 +66,13 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.7</version>
+            <version>1.2.10</version>
         </dependency>
     </dependencies>
 
     <organization>
-        <name>FightingGuys Team</name>
-        <url>https://fightingguys.cn/</url>
+        <name>PixMeow Studio</name>
+        <url>https://pixmeow.com/</url>
     </organization>
 
     <licenses>
@@ -77,17 +83,17 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/fightingguys/rabbit</url>
-        <connection>scm:git:git://github.com/fightingguys/rabbit.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/fightingguys/rabbit.git</developerConnection>
+        <url>https://github.com/Kamikuz/rabbit</url>
+        <connection>scm:git:git://github.com/Kamikuz/rabbit.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/Kamikuz/rabbit.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
     <distributionManagement>
         <repository>
             <id>github</id>
-            <name>FightingGuys Rabbit Packages</name>
-            <url>https://maven.pkg.github.com/fightingguys/rabbit</url>
+            <name>FightingGuys Rabbit Packages(Kamikuz Refactor Version)</name>
+            <url>https://maven.pkg.github.com/Kamikuz/rabbit</url>
         </repository>
     </distributionManagement>
 

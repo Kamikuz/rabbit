@@ -85,6 +85,7 @@ public class CacheManager extends RabbitObject {
         HttpCall guildListRequest = HttpCall.createRequest(guildListRoute.getMethod(), getCompleteUrl(guildListRoute), this.defaultHeaders);
         List<JsonNode> guildList = getRestJsonResponse(guildListRoute, guildListRequest);
         if (guildList == null) {
+            Log.error("Failed to fetch guild list."); //todo i18n
             return;
         }
         for (JsonNode list : guildList) {
@@ -92,7 +93,7 @@ public class CacheManager extends RabbitObject {
                 String guildId = item.get("id").asText();
                 fetchGuildData(guildId);
                 fetchGuildMemberData(guildId);
-                fetchGuildEmojiData(guildId);
+//                fetchGuildEmojiData(guildId);
             }
         }
     }
@@ -102,6 +103,7 @@ public class CacheManager extends RabbitObject {
         HttpCall guildIdRequest = HttpCall.createRequest(guildRoute.getMethod(), getCompleteUrl(guildRoute), this.defaultHeaders);
         List<JsonNode> guilds = getRestJsonResponse(guildRoute, guildIdRequest);
         if (guilds == null) {
+            Log.error("Failed to fetch guild data."); //todo i18n
             return;
         }
         JsonNode node = getRestApiData(guilds.get(0));
@@ -132,6 +134,7 @@ public class CacheManager extends RabbitObject {
         HttpCall guildIdRequest = HttpCall.createRequest(guildMemberRoute.getMethod(), getCompleteUrl(guildMemberRoute), this.defaultHeaders);
         List<JsonNode> members = getRestJsonResponse(guildMemberRoute, guildIdRequest);
         if (members == null) {
+            Log.error("Failed to fetch guild member list."); //todo i18n
             return;
         }
         HashMap<String, MemberEntity> memberEntities = new HashMap<>();
@@ -153,6 +156,7 @@ public class CacheManager extends RabbitObject {
         HttpCall guildEmojiRequest = HttpCall.createRequest(guildEmojiRoute.getMethod(), getCompleteUrl(guildEmojiRoute), this.defaultHeaders);
         List<JsonNode> emojis = getRestJsonResponse(guildEmojiRoute, guildEmojiRequest);
         if (emojis == null) {
+            Log.error("Failed to fetch guild emojis for guild " + guildId);
             return;
         }
         List<String> emojiList = new ArrayList<>();
@@ -236,6 +240,7 @@ public class CacheManager extends RabbitObject {
         ArrayList<JsonNode> result = new ArrayList<>();
         JsonNode root = callRestApi(call);
         if (root == null) {
+            Log.error("Not set the root");
             return null;
         }
         result.add(root);

@@ -46,7 +46,8 @@ public class WebSocketEventSourceHandle extends IWebSocketListener implements Ru
         ByteBuffer buffer;
         try {
             buffer = eventSource.compression.decompress(bytes);
-        } catch (IOException ignored) {
+        } catch (IOException e) {
+            Log.error("WebSocket 数据包解压失败", e);
             return;
         }
         eventSource.transfer(new String(buffer.array(), StandardCharsets.UTF_8));

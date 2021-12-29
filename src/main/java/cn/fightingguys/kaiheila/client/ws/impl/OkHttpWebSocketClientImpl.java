@@ -26,6 +26,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 public class OkHttpWebSocketClientImpl implements IWebSocketClient {
 
@@ -47,7 +50,6 @@ public class OkHttpWebSocketClientImpl implements IWebSocketClient {
     }
 
     public static class OkhttpWebSocketClientContext extends WebSocketListener implements IWebSocketContext {
-
         private WebSocket websocket;
         private boolean closed = true;
         private final IWebSocketListener listener;
@@ -106,13 +108,13 @@ public class OkHttpWebSocketClientImpl implements IWebSocketClient {
 
         @Override
         public void onMessage(WebSocket webSocket, String text) {
-            Log.trace("onMessage {}", text);
+            Log.trace("onMessage(plain) {}", text);
             listener.onTextMessage(this, text);
         }
 
         @Override
         public void onMessage(WebSocket webSocket, ByteString bytes) {
-            Log.trace("onMessage {}", bytes.toString());
+            Log.trace("onMessage(binary) {}", bytes.toString());
             listener.onBinaryMessage(this, ByteBuffer.wrap(bytes.toByteArray()));
         }
 
