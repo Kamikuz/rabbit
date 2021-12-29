@@ -25,5 +25,6 @@ jobs:
           X_KAIHEILA_API_TOKEN: ${{ secrets.X_KAIHEILA_API_TOKEN }}
           
       - name: Publish package
-        run: mvn deploy
-
+        run: mvn --batch-mode deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
