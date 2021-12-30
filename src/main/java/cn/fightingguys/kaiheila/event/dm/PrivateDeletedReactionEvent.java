@@ -19,6 +19,7 @@ package cn.fightingguys.kaiheila.event.dm;
 import cn.fightingguys.kaiheila.RabbitImpl;
 import cn.fightingguys.kaiheila.api.Emoji;
 import cn.fightingguys.kaiheila.api.User;
+import cn.fightingguys.kaiheila.core.action.Operation;
 import cn.fightingguys.kaiheila.event.AbstractEvent;
 import cn.fightingguys.kaiheila.event.IEvent;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -39,6 +40,11 @@ public class PrivateDeletedReactionEvent extends AbstractEvent {
         userId = body.get("user_id").asText();
         chatCode = body.get("chat_code").asText();
         emojiId = body.get("emoji").get("id").asText();
+    }
+
+    @Override
+    public Operation action() {
+        return null;
     }
 
     public String getMsgId() {

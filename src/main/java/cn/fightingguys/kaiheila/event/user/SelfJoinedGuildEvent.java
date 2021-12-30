@@ -18,6 +18,7 @@ package cn.fightingguys.kaiheila.event.user;
 
 import cn.fightingguys.kaiheila.RabbitImpl;
 import cn.fightingguys.kaiheila.api.Guild;
+import cn.fightingguys.kaiheila.core.action.Operation;
 import cn.fightingguys.kaiheila.event.AbstractEvent;
 import cn.fightingguys.kaiheila.event.IEvent;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -32,6 +33,11 @@ public class SelfJoinedGuildEvent extends AbstractEvent {
         super(rabbit, node);
         JsonNode body = super.getEventExtraBody(node);
         guildId = body.get("guild_id").asText();
+    }
+
+    @Override
+    public Operation action() {
+        return null;
     }
 
     public Guild getGuild() {

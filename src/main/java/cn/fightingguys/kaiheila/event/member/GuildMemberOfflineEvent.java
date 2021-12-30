@@ -20,6 +20,7 @@ import cn.fightingguys.kaiheila.RabbitImpl;
 import cn.fightingguys.kaiheila.api.Guild;
 import cn.fightingguys.kaiheila.api.User;
 import cn.fightingguys.kaiheila.cache.CacheManager;
+import cn.fightingguys.kaiheila.core.action.Operation;
 import cn.fightingguys.kaiheila.entity.GuildEntity;
 import cn.fightingguys.kaiheila.event.AbstractEvent;
 import cn.fightingguys.kaiheila.event.IEvent;
@@ -46,6 +47,11 @@ public class GuildMemberOfflineEvent extends AbstractEvent {
         ArrayList<String> gId = new ArrayList<>();
         body.get("guilds").iterator().forEachRemaining(r -> gId.add(r.asText()));
         guilds = gId;
+    }
+
+    @Override
+    public Operation action() {
+        return null;
     }
 
     public User getUser() {

@@ -18,6 +18,7 @@ package cn.fightingguys.kaiheila.event.dm;
 
 import cn.fightingguys.kaiheila.RabbitImpl;
 import cn.fightingguys.kaiheila.api.User;
+import cn.fightingguys.kaiheila.core.action.Operation;
 import cn.fightingguys.kaiheila.event.AbstractEvent;
 import cn.fightingguys.kaiheila.event.IEvent;
 import cn.fightingguys.kaiheila.util.TimeUtil;
@@ -45,6 +46,11 @@ public class UpdatedPrivateMessageEvent extends AbstractEvent {
         content = body.get("content").asText();
         chatCode = body.get("chat_code").asText();
         updatedAt = TimeUtil.convertUnixTimeMillisecondLocalDateTime(body.get("updated_at").asLong());
+    }
+
+    @Override
+    public Operation action() {
+        return null;
     }
 
     public String getMsgId() {

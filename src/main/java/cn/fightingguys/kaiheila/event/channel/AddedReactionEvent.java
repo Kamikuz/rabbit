@@ -20,6 +20,7 @@ import cn.fightingguys.kaiheila.RabbitImpl;
 import cn.fightingguys.kaiheila.api.Channel;
 import cn.fightingguys.kaiheila.api.Emoji;
 import cn.fightingguys.kaiheila.api.User;
+import cn.fightingguys.kaiheila.core.action.Operation;
 import cn.fightingguys.kaiheila.event.AbstractEvent;
 import cn.fightingguys.kaiheila.event.IEvent;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -40,6 +41,11 @@ public class AddedReactionEvent extends AbstractEvent {
         this.userId = body.get("user_id").asText();
         this.channelId = body.get("channel_id").asText();
         this.emojiId = body.get("emoji").get("id").asText();
+    }
+
+    @Override
+    public Operation action() {
+        return null;
     }
 
     public String getMsgId() {

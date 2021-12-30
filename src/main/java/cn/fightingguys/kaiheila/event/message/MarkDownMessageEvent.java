@@ -17,6 +17,7 @@
 package cn.fightingguys.kaiheila.event.message;
 
 import cn.fightingguys.kaiheila.RabbitImpl;
+import cn.fightingguys.kaiheila.core.action.Operation;
 import cn.fightingguys.kaiheila.event.AbstractEvent;
 import cn.fightingguys.kaiheila.event.IEvent;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -28,6 +29,11 @@ public class MarkDownMessageEvent extends AbstractEvent {
     public MarkDownMessageEvent(RabbitImpl rabbit, JsonNode node) {
         super(rabbit, node);
         this.extra = MessageExtra.buildMessageExtra(rabbit, node);
+    }
+
+    @Override
+    public Operation action() {
+        return null;
     }
 
     public MessageExtra getExtra() {

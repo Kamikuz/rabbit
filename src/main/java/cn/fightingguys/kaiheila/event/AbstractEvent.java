@@ -19,6 +19,7 @@ package cn.fightingguys.kaiheila.event;
 import cn.fightingguys.kaiheila.RabbitImpl;
 import cn.fightingguys.kaiheila.api.User;
 import cn.fightingguys.kaiheila.core.RabbitObject;
+import cn.fightingguys.kaiheila.core.action.Operation;
 import cn.fightingguys.kaiheila.util.TimeUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -49,6 +50,10 @@ public abstract class AbstractEvent extends RabbitObject implements IEvent {
 
     public JsonNode getEventExtraBody(JsonNode node) {
         return node.get("extra").get("body");
+    }
+
+    public JsonNode getEventType(JsonNode node) {
+        return node.get("extra").get("type");
     }
 
     public String getEventChannelType() {
@@ -83,4 +88,5 @@ public abstract class AbstractEvent extends RabbitObject implements IEvent {
         return eventNonce;
     }
 
+    public abstract Operation action();
 }

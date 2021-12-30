@@ -19,6 +19,7 @@ package cn.fightingguys.kaiheila.event.user;
 import cn.fightingguys.kaiheila.RabbitImpl;
 import cn.fightingguys.kaiheila.api.User;
 import cn.fightingguys.kaiheila.cache.BaseCache;
+import cn.fightingguys.kaiheila.core.action.Operation;
 import cn.fightingguys.kaiheila.entity.UserEntity;
 import cn.fightingguys.kaiheila.event.AbstractEvent;
 import cn.fightingguys.kaiheila.event.IEvent;
@@ -41,6 +42,11 @@ public class UserUpdatedEvent extends AbstractEvent {
         userId = body.get("user_id").asText();
         username = body.get("username").asText();
         avatar = body.get("avatar").asText();
+    }
+
+    @Override
+    public Operation action() {
+        return null;
     }
 
     public User getUser() {

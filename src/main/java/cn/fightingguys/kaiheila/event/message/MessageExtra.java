@@ -27,15 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MessageExtra extends RabbitObject {
-
-    private int type;
-    private String guildId;
-    private String channelName;
-    private List<String> mention;
-    private boolean mentionAll;
-    private List<Integer> mentionRoles;
-    private boolean mentionHere;
-    private String authorId;
+    protected int type;
+    protected String authorId;
 
     public MessageExtra(RabbitImpl rabbit) {
         super(rabbit);
@@ -45,40 +38,29 @@ public class MessageExtra extends RabbitObject {
         return type;
     }
 
-    public Guild getGuild() {
-        return getRabbitImpl().getCacheManager().getGuildCache().getElementById(guildId);
-    }
-
-    public String getChannelName() {
-        return channelName;
-    }
-
-    public List<User> getMention() {
-        ArrayList<User> r = new ArrayList<>();
-        mention.forEach(s -> r.add(getRabbitImpl().getCacheManager().getUserCache().getElementById(s)));
-        return r;
-    }
-
-    public boolean isMentionAll() {
-        return mentionAll;
-    }
-
-    public List<Role> getMentionRoles() {
-        ArrayList<Role> r = new ArrayList<>();
-        mentionRoles.forEach(s -> r.add(getRabbitImpl().getCacheManager().getRoleCache().getElementById(s)));
-        return r;
-    }
-
-    public boolean isMentionHere() {
-        return mentionHere;
-    }
-
     public User getAuthor() {
         return getRabbitImpl().getCacheManager().getUserCache().getElementById(authorId);
     }
 
-    public static MessageExtra buildMessageExtra(RabbitImpl rabbit, JsonNode node) {
-        MessageExtra r = new MessageExtra(rabbit);
+    public static PersonalMessageExtra buildPersonalMessageExtra(RabbitImpl rabbit, JsonNode node) {
+        PersonalMessageExtra r = new PersonalMessageExtra(rabbit);
+        JsonNode extra = node.get("extra");
+        r.type = extra.get("type").asInt();
+        r.authorId = extra.get("author").get("id").asText();
+        return r;
+    }
+
+    public static MessageExtra buildMessageExtra(RabbitImpl rabbit, JsonNode node){
+        JsonNode extra = node.get("extra");
+        if(node.get("channel_type").asText().equals("PERSON")){
+            return buildPersonalMessageExtra(rabbit, node);
+        }else{
+            return buildChannelMessageExtra(rabbit, node);
+        }
+    }
+
+    public static ChannelMessageExtra buildChannelMessageExtra(RabbitImpl rabbit, JsonNode node) {
+        ChannelMessageExtra r = new ChannelMessageExtra(rabbit);
         JsonNode extra = node.get("extra");
         r.type = extra.get("type").asInt();
         r.guildId = extra.get("guild_id").asText();
@@ -99,4 +81,51 @@ public class MessageExtra extends RabbitObject {
         return r;
     }
 
+    public static class ChannelMessageExtra extends PersonalMessageExtra {
+        protected String guildId;
+        protected String channelName;
+        protected List<String> mention;
+        protected boolean mentionAll;
+        protected List<Integer> mentionRoles;
+        protected boolean mentionHere;
+
+        public Guild getGuild() {
+            return getRabbitImpl().getCacheManager().getGuildCache().getElementById(guildId);
+        }
+
+        public String getChannelName() {
+            return channelName;
+        }
+
+        public List<User> getMention() {
+            ArrayList<User> r = new ArrayList<>();
+            mention.forEach(s -> r.add(getRabbitImpl().getCacheManager().getUserCache().getElementById(s)));
+            return r;
+        }
+
+        public boolean isMentionAll() {
+            return mentionAll;
+        }
+
+        public List<Role> getMentionRoles() {
+            ArrayList<Role> r = new ArrayList<>();
+            mentionRoles.forEach(s -> r.add(getRabbitImpl().getCacheManager().getRoleCache().getElementById(s)));
+            return r;
+        }
+
+        public boolean isMentionHere() {
+            return mentionHere;
+        }
+
+        public ChannelMessageExtra(RabbitImpl rabbit) {
+            super(rabbit);
+        }
+    }
+
+    public static class PersonalMessageExtra extends MessageExtra {
+
+        public PersonalMessageExtra(RabbitImpl rabbit) {
+            super(rabbit);
+        }
+    }
 }

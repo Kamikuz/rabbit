@@ -19,6 +19,7 @@ package cn.fightingguys.kaiheila.event.channel;
 import cn.fightingguys.kaiheila.RabbitImpl;
 import cn.fightingguys.kaiheila.api.Channel;
 import cn.fightingguys.kaiheila.api.User;
+import cn.fightingguys.kaiheila.core.action.Operation;
 import cn.fightingguys.kaiheila.event.AbstractEvent;
 import cn.fightingguys.kaiheila.event.IEvent;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -37,6 +38,11 @@ public class UnPinnedMessageEvent extends AbstractEvent {
         msgId = body.get("msg_id").asText();
         operatorId = body.get("operator_id").asText();
         channelId = body.get("channel_id").asText();
+    }
+
+    @Override
+    public Operation action() {
+        return null;
     }
 
     public Channel getChannel() {

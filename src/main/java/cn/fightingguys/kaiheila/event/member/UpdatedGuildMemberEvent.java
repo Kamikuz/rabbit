@@ -18,6 +18,7 @@ package cn.fightingguys.kaiheila.event.member;
 
 import cn.fightingguys.kaiheila.RabbitImpl;
 import cn.fightingguys.kaiheila.api.User;
+import cn.fightingguys.kaiheila.core.action.Operation;
 import cn.fightingguys.kaiheila.event.AbstractEvent;
 import cn.fightingguys.kaiheila.event.IEvent;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -34,6 +35,11 @@ public class UpdatedGuildMemberEvent extends AbstractEvent {
         JsonNode body = super.getEventExtraBody(node);
         userId = body.get("user_id").asText();
         nickname = body.get("nickname").asText();
+    }
+
+    @Override
+    public Operation action() {
+        return null;
     }
 
     public User getUser() {

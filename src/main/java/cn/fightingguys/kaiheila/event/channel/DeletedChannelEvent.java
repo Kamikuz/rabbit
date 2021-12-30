@@ -19,6 +19,7 @@ package cn.fightingguys.kaiheila.event.channel;
 import cn.fightingguys.kaiheila.RabbitImpl;
 import cn.fightingguys.kaiheila.api.Channel;
 import cn.fightingguys.kaiheila.cache.BaseCache;
+import cn.fightingguys.kaiheila.core.action.Operation;
 import cn.fightingguys.kaiheila.entity.ChannelEntity;
 import cn.fightingguys.kaiheila.entity.GuildEntity;
 import cn.fightingguys.kaiheila.event.AbstractEvent;
@@ -40,6 +41,11 @@ public class DeletedChannelEvent extends AbstractEvent {
         JsonNode body = super.getEventExtraBody(node);
         channelId = body.get("id").asText();
         deletedAt = TimeUtil.convertUnixTimeMillisecondLocalDateTime(body.get("deleted_at").asLong());
+    }
+
+    @Override
+    public Operation action() {
+        return null;
     }
 
     public Channel getChannel() {

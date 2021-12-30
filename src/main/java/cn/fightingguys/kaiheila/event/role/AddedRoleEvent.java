@@ -20,6 +20,7 @@ import cn.fightingguys.kaiheila.RabbitImpl;
 import cn.fightingguys.kaiheila.api.Role;
 import cn.fightingguys.kaiheila.cache.BaseCache;
 import cn.fightingguys.kaiheila.cache.ICacheView;
+import cn.fightingguys.kaiheila.core.action.Operation;
 import cn.fightingguys.kaiheila.entity.RoleEntity;
 import cn.fightingguys.kaiheila.event.AbstractEvent;
 import cn.fightingguys.kaiheila.event.IEvent;
@@ -35,6 +36,11 @@ public class AddedRoleEvent extends AbstractEvent {
         super(rabbit, node);
         JsonNode body = super.getEventExtraBody(node);
         roleId = body.get("role_id").asInt();
+    }
+
+    @Override
+    public Operation action() {
+        return null;
     }
 
     public Role getRole() {

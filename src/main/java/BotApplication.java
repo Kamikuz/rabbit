@@ -39,6 +39,7 @@ public class BotApplication {
      * 创建用户事件处理器
      */
     public static class UserEventHandler extends EventListener {
+        Logger Log = LoggerFactory.getLogger(UserEventHandler.class);
         /**
          * 接收文本消息事件
          *
@@ -48,7 +49,8 @@ public class BotApplication {
         @Override
         public void onTextMessageEvent(Rabbit rabbit, TextMessageEvent event) {
             // 监听文本消息事件内容
-            System.out.println(event.getEventContent());
+            if (event.type == TextMessageEvent.Type.Group) Log.info("[{} | {}]{}",event.getChannel().getName(), event.getEventAuthorId().getUsername(), event.getEventContent());
+            else Log.info("[{}]{}",event.getEventAuthorId().getUsername(), event.getEventContent());
         }
     }
 }

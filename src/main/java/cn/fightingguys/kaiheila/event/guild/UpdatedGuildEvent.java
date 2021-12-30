@@ -20,6 +20,7 @@ import cn.fightingguys.kaiheila.RabbitImpl;
 import cn.fightingguys.kaiheila.api.Guild;
 import cn.fightingguys.kaiheila.cache.BaseCache;
 import cn.fightingguys.kaiheila.cache.ICacheView;
+import cn.fightingguys.kaiheila.core.action.Operation;
 import cn.fightingguys.kaiheila.entity.GuildEntity;
 import cn.fightingguys.kaiheila.event.AbstractEvent;
 import cn.fightingguys.kaiheila.event.IEvent;
@@ -35,6 +36,11 @@ public class UpdatedGuildEvent extends AbstractEvent {
         super(rabbit, node);
         JsonNode body = super.getEventExtraBody(node);
         guildId = body.get("id").asText();
+    }
+
+    @Override
+    public Operation action() {
+        return null;
     }
 
     public Guild getGuild() {

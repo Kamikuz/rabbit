@@ -17,6 +17,7 @@
 package cn.fightingguys.kaiheila.event;
 
 import cn.fightingguys.kaiheila.RabbitImpl;
+import cn.fightingguys.kaiheila.core.action.Operation;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public final class UnknownEvent extends AbstractEvent {
@@ -26,6 +27,11 @@ public final class UnknownEvent extends AbstractEvent {
     public UnknownEvent(RabbitImpl rabbit, JsonNode node) {
         super(rabbit, node);
         this.rawEventData = node.toString();
+    }
+
+    @Override
+    public Operation action() {
+        return null;
     }
 
     public String getRawEventData() {

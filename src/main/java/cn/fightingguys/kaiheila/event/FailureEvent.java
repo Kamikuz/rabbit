@@ -1,6 +1,7 @@
 package cn.fightingguys.kaiheila.event;
 
 import cn.fightingguys.kaiheila.RabbitImpl;
+import cn.fightingguys.kaiheila.core.action.Operation;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class FailureEvent extends AbstractEvent {
@@ -24,5 +25,10 @@ public class FailureEvent extends AbstractEvent {
     @Override
     public IEvent handleSystemEvent(JsonNode body) {
         return this;
+    }
+
+    @Override
+    public Operation action() {
+        return null;
     }
 }

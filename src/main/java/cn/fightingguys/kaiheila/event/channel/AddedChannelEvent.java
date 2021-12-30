@@ -21,6 +21,7 @@ import cn.fightingguys.kaiheila.api.Channel;
 import cn.fightingguys.kaiheila.api.Guild;
 import cn.fightingguys.kaiheila.cache.BaseCache;
 import cn.fightingguys.kaiheila.cache.CacheManager;
+import cn.fightingguys.kaiheila.core.action.Operation;
 import cn.fightingguys.kaiheila.entity.ChannelEntity;
 import cn.fightingguys.kaiheila.entity.GuildEntity;
 import cn.fightingguys.kaiheila.event.AbstractEvent;
@@ -39,6 +40,11 @@ public class AddedChannelEvent extends AbstractEvent {
         JsonNode body = super.getEventExtraBody(node);
         guildId = body.get("guild_id").asText();
         channelId = body.get("id").asText();
+    }
+
+    @Override
+    public Operation action() {
+        return null;
     }
 
     public Guild getGuild() {

@@ -82,24 +82,25 @@ public class EntitiesBuilder extends RabbitObject {
         return overwrites;
     }
 
-    private ChannelEntity buildChannelEntityBase(JsonNode node) {
+    private ChannelEntity buildChannelEntityBase(JsonNode node, boolean isUpdate) {
+        System.out.println(node.toString());
         ChannelEntity channel = new ChannelEntity(getRabbitImpl());
         channel.setId(node.get("id").asText());
         channel.setType(node.get("type").asInt());
         channel.setName(node.get("name").asText());
-        channel.setMasterId(node.get("master_id").asText());
+        if (!isUpdate) channel.setMasterId(node.get("master_id").asText());
         channel.setGuildId(node.get("guild_id").asText());
         channel.setTopic(node.get("topic").asText());
         channel.setCategory(node.get("is_category").asBoolean());
         channel.setParentId(node.get("parent_id").asText());
         channel.setLevel(node.get("level").asInt());
         channel.setSlowMode(node.get("slow_mode").asInt());
-        channel.setLimitAmount(node.get("limit_amount").asInt());
+        if (!isUpdate) channel.setLimitAmount(node.get("limit_amount").asInt());
         return channel;
     }
 
     public ChannelEntity buildChannelEntity(JsonNode node) {
-        ChannelEntity channel = buildChannelEntityBase(node);
+        ChannelEntity channel = buildChannelEntityBase(node, false);
         channel.setPermissionOverwrites(buildPermissionOverwrites(node.get("permission_overwrites"), false));
         channel.setPermissionUsers(buildPermissionOverwrites(node.get("permission_users"), true));
         channel.setPermissionSync(node.get("permission_sync").asInt() == 1);
@@ -117,7 +118,7 @@ public class EntitiesBuilder extends RabbitObject {
     }
 
     public ChannelEntity buildChannelEntityForEvent(JsonNode node) {
-        ChannelEntity channel = buildChannelEntityBase(node);
+        ChannelEntity channel = buildChannelEntityBase(node, true);
         channel.setPermissionOverwrites(new ArrayList<>());
         channel.setPermissionUsers(new ArrayList<>());
         channel.setPermissionSync(true);

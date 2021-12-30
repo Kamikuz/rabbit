@@ -18,6 +18,7 @@ package cn.fightingguys.kaiheila.event.guild;
 
 import cn.fightingguys.kaiheila.RabbitImpl;
 import cn.fightingguys.kaiheila.api.User;
+import cn.fightingguys.kaiheila.core.action.Operation;
 import cn.fightingguys.kaiheila.event.AbstractEvent;
 import cn.fightingguys.kaiheila.event.IEvent;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -39,6 +40,11 @@ public class DeletedBlockListEvent extends AbstractEvent {
         ArrayList<String> users = new ArrayList<>();
         body.get("user_id").iterator().forEachRemaining(r -> users.add(r.asText()));
         userId = users;
+    }
+
+    @Override
+    public Operation action() {
+        return null;
     }
 
     public User getOperator() {

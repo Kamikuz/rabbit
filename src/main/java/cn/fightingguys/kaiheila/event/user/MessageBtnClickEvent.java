@@ -18,6 +18,7 @@ package cn.fightingguys.kaiheila.event.user;
 
 import cn.fightingguys.kaiheila.RabbitImpl;
 import cn.fightingguys.kaiheila.api.User;
+import cn.fightingguys.kaiheila.core.action.Operation;
 import cn.fightingguys.kaiheila.event.AbstractEvent;
 import cn.fightingguys.kaiheila.event.IEvent;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -38,6 +39,11 @@ public class MessageBtnClickEvent extends AbstractEvent {
         userId = body.get("msg_id").asText();
         value = body.get("user_id").asText();
         targetId = body.get("target_id").asText();
+    }
+
+    @Override
+    public Operation action() {
+        return null;
     }
 
     public String getMsgId() {

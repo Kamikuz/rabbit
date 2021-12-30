@@ -18,6 +18,7 @@ package cn.fightingguys.kaiheila.event.dm;
 
 import cn.fightingguys.kaiheila.RabbitImpl;
 import cn.fightingguys.kaiheila.api.User;
+import cn.fightingguys.kaiheila.core.action.Operation;
 import cn.fightingguys.kaiheila.event.AbstractEvent;
 import cn.fightingguys.kaiheila.event.IEvent;
 import cn.fightingguys.kaiheila.util.TimeUtil;
@@ -43,6 +44,11 @@ public class DeletedPrivateMessageEvent extends AbstractEvent {
         targetId = body.get("target_id").asText();
         chatCode = body.get("chat_code").asText();
         deletedAt = TimeUtil.convertUnixTimeMillisecondLocalDateTime(body.get("deleted_at").asLong());
+    }
+
+    @Override
+    public Operation action() {
+        return null;
     }
 
     public String getMsgId() {
