@@ -22,17 +22,16 @@ public class RequestBuilder extends RabbitObject {
     headers.addHeader("Authorization", "Bot " + getRabbitImpl().getConfiguration().getApiConfigurer().getToken());
   }
 
-
   public static RequestBuilder create(RabbitImpl rabbit, RestRoute route) {
     return new RequestBuilder(rabbit, route.compile());
   }
 
-  public RequestBuilder withData(String key, String value) {
+  public RequestBuilder withData(String key, Object value) {
     if (value == null) return this;
     if (formBuilder == null) {
       formBuilder = new FormBody.Builder();
     }
-    formBuilder.add(key, value);
+    formBuilder.add(key, String.valueOf(value));
     return this;
   }
 

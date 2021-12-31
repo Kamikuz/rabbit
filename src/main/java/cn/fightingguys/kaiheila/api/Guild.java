@@ -1,5 +1,7 @@
 package cn.fightingguys.kaiheila.api;
 
+import cn.fightingguys.kaiheila.core.action.Operation;
+
 /**
  * 服务器
  */
@@ -106,4 +108,11 @@ public interface Guild {
      * @return 服务器离线用户数
      */
     int getOfflineCount();
+
+    /**
+     * 获取当前服务器操作
+     *
+     * @return 服务器操作
+     */
+    Operation.ServerOperation getServerOperation();
 }

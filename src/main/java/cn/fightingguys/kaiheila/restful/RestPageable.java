@@ -38,7 +38,7 @@ public class RestPageable implements Iterator<RestRoute.CompiledRoute> {
     @Override
     public boolean hasNext() {
         if (this.metadata != null)
-            return this.page != this.metadata.getPageTotal();
+            return this.metadata.getPageTotal() != 0 && this.page != this.metadata.getPageTotal();
         else
             return false;
     }

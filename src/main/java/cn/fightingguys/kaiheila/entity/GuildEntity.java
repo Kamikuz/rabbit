@@ -3,6 +3,7 @@ package cn.fightingguys.kaiheila.entity;
 import cn.fightingguys.kaiheila.RabbitImpl;
 import cn.fightingguys.kaiheila.api.*;
 import cn.fightingguys.kaiheila.core.RabbitObject;
+import cn.fightingguys.kaiheila.core.action.Operation;
 
 import java.util.List;
 
@@ -173,6 +174,16 @@ public class GuildEntity extends RabbitObject implements Guild {
     @Override
     public int getOfflineCount() {
         return offlineCount;
+    }
+
+    /**
+     * 获取当前服务器操作
+     *
+     * @return 服务器操作
+     */
+    @Override
+    public Operation.ServerOperation getServerOperation() {
+        return new Operation.ServerOperation(getRabbitImpl(),this);
     }
 
     public void setId(String id) {

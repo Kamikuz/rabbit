@@ -7,6 +7,9 @@ import cn.fightingguys.kaiheila.api.Role;
 import cn.fightingguys.kaiheila.api.User;
 import cn.fightingguys.kaiheila.client.http.HttpCall;
 import cn.fightingguys.kaiheila.client.http.RequestBuilder;
+import cn.fightingguys.kaiheila.entity.cardmessage.CardMessage;
+import cn.fightingguys.kaiheila.entity.cardmessage.CardMessageBuilder;
+import cn.fightingguys.kaiheila.entity.kmarkdown.KMarkdown;
 import cn.fightingguys.kaiheila.event.message.TextMessageEvent;
 import cn.fightingguys.kaiheila.restful.RestRoute;
 import cn.fightingguys.kaiheila.restful.RestfulService;
@@ -70,11 +73,111 @@ public abstract class Operation extends RestfulService {
       return this;
     }
 
+    public ChatOperation replyOnChannel(CardMessageBuilder content, boolean isTemp, boolean isReply) {
+      Log.info("Reply on channel {}", message.getChannel().getName());
+      if (message.type == TextMessageEvent.Type.Group) {
+        HttpCall req = RequestBuilder.create(getRabbitImpl(), RestRoute.ChannelMessage.SEND_CHANNEL_MESSAGE)
+            .withData("channel_id", message.getChannel().getId())
+            .withData("nonce", "bot-message")
+            .withData("type", 10)
+            .withData("content", content)
+            .withData("quote", isReply ? message.messageID : null)
+            .withData("temp_target_id", isTemp ? message.getEventAuthorId().getId() : null)
+            .build();
+        try{
+          JsonNode data = getRestActionJsonResponse(req);
+          if (handleResult(data)) Log.info("Successfully reply message to channel {} @ {}", message.getChannel().getName(), message.getEventAuthorId().getFullName());
+          else Log.error("Failed reply message to channel {} @ {}, reason: {}", message.getChannel().getName(), message.getEventAuthorId().getFullName(), data.get("message").asText());
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+      return this;
+    }
+
+    public ChatOperation replyOnPerson(CardMessageBuilder content, boolean isReply) {
+      Log.info("Reply on person {}", message.getEventAuthorId().getFullName());
+      if (message.type == TextMessageEvent.Type.Person) {
+        HttpCall req = RequestBuilder.create(getRabbitImpl(), RestRoute.DirectMessage.SEND_DIRECT_MESSAGE)
+            .withData("target_id", message.getEventAuthorId().getId())
+            .withData("nonce", "bot-message")
+            .withData("type", 10)
+            .withData("content", content)
+            .withData("quote", isReply ? message.messageID : null)
+            .build();
+        try{
+          JsonNode data = getRestActionJsonResponse(req);
+          if (handleResult(data)) Log.info("Successfully reply message to {}", message.asPrivateMessageEvent().getExtra().getAuthor().getFullName());
+          else Log.error("Failed to reply message to {}, reason: {}", message.asPrivateMessageEvent().getExtra().getAuthor().getFullName(), data.get("message").asText());
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+      return this;
+    }
+
+    public ChatOperation replyOnChannel(KMarkdown kMarkdown, boolean isTemp, boolean isReply) {
+      Log.info("Reply on channel {}", message.getChannel().getName());
+      if (message.type == TextMessageEvent.Type.Group) {
+        HttpCall req = RequestBuilder.create(getRabbitImpl(), RestRoute.ChannelMessage.SEND_CHANNEL_MESSAGE)
+            .withData("channel_id", message.getChannel().getId())
+            .withData("nonce", "bot-message")
+            .withData("type", 9)
+            .withData("content", kMarkdown)
+            .withData("quote", isReply ? message.messageID : null)
+            .withData("temp_target_id", isTemp ? message.getEventAuthorId().getId() : null)
+            .build();
+        try{
+          JsonNode data = getRestActionJsonResponse(req);
+          if (handleResult(data)) Log.info("Successfully reply message to channel {} @ {}", message.getChannel().getName(), message.getEventAuthorId().getFullName());
+          else Log.error("Failed reply message to channel {} @ {}, reason: {}", message.getChannel().getName(), message.getEventAuthorId().getFullName(), data.get("message").asText());
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+      return this;
+    }
+
+    public ChatOperation replyOnPerson(KMarkdown kMarkdown, boolean isReply) {
+      Log.info("Reply on person {}", message.getEventAuthorId().getFullName());
+      if (message.type == TextMessageEvent.Type.Person) {
+        HttpCall req = RequestBuilder.create(getRabbitImpl(), RestRoute.DirectMessage.SEND_DIRECT_MESSAGE)
+            .withData("target_id", message.getEventAuthorId().getId())
+            .withData("nonce", "bot-message")
+            .withData("type", 9)
+            .withData("content", kMarkdown.value)
+            .withData("quote", isReply ? message.messageID : null)
+            .build();
+        try{
+          JsonNode data = getRestActionJsonResponse(req);
+          if (handleResult(data)) Log.info("Successfully reply message to {}", message.asPrivateMessageEvent().getExtra().getAuthor().getFullName());
+          else Log.error("Failed to reply message to {}, reason: {}", message.asPrivateMessageEvent().getExtra().getAuthor().getFullName(), data.get("message").asText());
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+      return this;
+    }
+
     public ChatOperation reply(String content) {
       if (message.type == TextMessageEvent.Type.Group) {
         return replyOnChannel(content, false, false);
       }
       return replyOnPerson(content, false);
+    }
+
+    public ChatOperation reply(CardMessageBuilder cardMessage) {
+      if (message.type == TextMessageEvent.Type.Group) {
+        return replyOnChannel(cardMessage, false, false);
+      }
+      return replyOnPerson(cardMessage, false);
+    }
+
+    public ChatOperation reply(KMarkdown kMarkdown) {
+      if (message.type == TextMessageEvent.Type.Group) {
+        return replyOnChannel(kMarkdown, false, false);
+      }
+      return replyOnPerson(kMarkdown, false);
     }
 
     public UserOperation getUser() {
@@ -206,6 +309,26 @@ public abstract class Operation extends RestfulService {
     public RoleOperation getMember(int id){
       return new RoleOperation(getRabbitImpl(), server, getRabbitImpl().getCacheManager().getRoleCache().getElementById(id));
     }
+
+    public String createServerInvite(InviteDuration duration, InviteTimes times){
+      HttpCall req = RequestBuilder.create(getRabbitImpl(), RestRoute.Invite.CREATE_INVITE)
+          .withData("guild_id", server.getId())
+          .withData("duration", duration)
+          .withData("setting_times", times)
+          .build();
+      try{
+        JsonNode data = getRestActionJsonResponse(req);
+        if (handleResult(data)) {
+          return data.get("data").get("url").asText();
+        }else{
+          Log.error("Failed to create server invite! Reason: {}",data.get("message").asText());
+        }
+      } catch (InterruptedException e) {
+        Log.error("Failed to create server invite! Reason: {}", e.getMessage());
+        e.printStackTrace();
+      }
+      return null;
+    }
   }
 
   public static class RoleOperation extends Operation {
@@ -288,6 +411,96 @@ public abstract class Operation extends RestfulService {
         e.printStackTrace();
       }
       return this;
+    }
+
+    public ChannelOperation broadcastMessage(CardMessageBuilder message) {
+      HttpCall req = RequestBuilder.create(getRabbitImpl(), RestRoute.ChannelMessage.SEND_CHANNEL_MESSAGE)
+          .withData("target_id", channel.getId())
+          .withData("nonce", "bot-message")
+          .withData("type", 10)
+          .withData("content", message)
+          .build();
+      try{
+        JsonNode data = getRestActionJsonResponse(req);
+        if (handleResult(data)) Log.info("Successfully broadcast message to channel {}", channel.getName());
+        else Log.error("Failed to broadcast message to channel {}, reason: {}", channel.getName(), data.get("message").asText());
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+      return this;
+    }
+
+    public ChannelOperation sendTempMessage(CardMessageBuilder message, String uid){
+      HttpCall req = RequestBuilder.create(getRabbitImpl(), RestRoute.ChannelMessage.SEND_CHANNEL_MESSAGE)
+          .withData("target_id", channel.getId())
+          .withData("nonce", "bot-message")
+          .withData("type", 10)
+          .withData("content", message)
+          .withData("temp_target_id", uid)
+          .build();
+      try{
+        JsonNode data = getRestActionJsonResponse(req);
+        if (handleResult(data)) Log.info("Successfully send temp message to channel {}", channel.getName());
+        else Log.error("Failed to send temp message to channel {}, reason: {}", channel.getName(), data.get("message").asText());
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+      return this;
+    }
+
+    public ChannelOperation broadcastMessage(KMarkdown message) {
+      HttpCall req = RequestBuilder.create(getRabbitImpl(), RestRoute.ChannelMessage.SEND_CHANNEL_MESSAGE)
+          .withData("target_id", channel.getId())
+          .withData("nonce", "bot-message")
+          .withData("type", 9)
+          .withData("content", message)
+          .build();
+      try{
+        JsonNode data = getRestActionJsonResponse(req);
+        if (handleResult(data)) Log.info("Successfully broadcast message to channel {}", channel.getName());
+        else Log.error("Failed to broadcast message to channel {}, reason: {}", channel.getName(), data.get("message").asText());
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+      return this;
+    }
+
+    public ChannelOperation sendTempMessage(KMarkdown message, String uid){
+      HttpCall req = RequestBuilder.create(getRabbitImpl(), RestRoute.ChannelMessage.SEND_CHANNEL_MESSAGE)
+          .withData("target_id", channel.getId())
+          .withData("nonce", "bot-message")
+          .withData("type", 9)
+          .withData("content", message)
+          .withData("temp_target_id", uid)
+          .build();
+      try{
+        JsonNode data = getRestActionJsonResponse(req);
+        if (handleResult(data)) Log.info("Successfully send temp message to channel {}", channel.getName());
+        else Log.error("Failed to send temp message to channel {}, reason: {}", channel.getName(), data.get("message").asText());
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+      return this;
+    }
+
+    public String createChannelInvite(InviteDuration duration, InviteTimes times){
+      HttpCall req = RequestBuilder.create(getRabbitImpl(), RestRoute.Invite.CREATE_INVITE)
+          .withData("channel_id", channel.getId())
+          .withData("duration", duration)
+          .withData("setting_times", times)
+          .build();
+      try{
+        JsonNode data = getRestActionJsonResponse(req);
+        if (handleResult(data)) {
+          return data.get("url").asText();
+        }else{
+          Log.error("Failed to create server invite! Reason: {}",data.get("message").asText());
+        }
+      } catch (InterruptedException e) {
+        Log.error("Failed to create server invite! Reason: {}", e.getMessage());
+        e.printStackTrace();
+      }
+      return null;
     }
 
     public ServerOperation getServer(){

@@ -1,6 +1,5 @@
 package cn.fightingguys.kaiheila.entity.cardmessage;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CardMessage implements Serializable {
-    private final List<Module> modules = new ArrayList<>();
-    private String type;
-    private Theme theme;
-    private Color color;
-    private Size size;
+    private final JSONArray modules = new JSONArray();
+    private String type = "card";
+    private Theme theme = Theme.Secondary;
+    private Color color = Color.WHITE;
+    private Size size = Size.LG;
 
     public static CardMessage create() {
         return new CardMessage();
@@ -46,17 +45,17 @@ public class CardMessage implements Serializable {
         try {
             json.put("type", type);
             json.put("theme", theme.toString());
-            json.put("color", color.toString());
+            if (theme == Theme.None) json.put("color", color.getRGB());
             json.put("size", size.toString());
-            json.put("modules", modules.toString());
+            json.put("modules", modules);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return json;
     }
 
-    public CardMessage add(Module modules) {
-        this.modules.add(modules);
+    public CardMessage add(Module module) {
+        this.modules.put(module.toJSON());
         return this;
     }
 
@@ -77,6 +76,11 @@ public class CardMessage implements Serializable {
         Theme(String value) {
             this.value = value;
         }
+
+        @Override
+        public String toString() {
+            return value;
+        }
     }
 
     public enum Size {
@@ -86,6 +90,11 @@ public class CardMessage implements Serializable {
 
         Size() {
             this.value = this.name().toLowerCase();
+        }
+
+        @Override
+        public String toString() {
+            return value;
         }
     }
 
@@ -657,5 +666,10 @@ public class CardMessage implements Serializable {
                 return json;
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return toJSON().toString();
     }
 }

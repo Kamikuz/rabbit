@@ -6,22 +6,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CardMessageBuilder {
-    private final List<CardMessage> messages = new ArrayList<>();
+    private final JSONArray messages = new JSONArray();
 
     public static CardMessageBuilder start() {
         return new CardMessageBuilder();
     }
 
     public JSONArray build() {
-        JSONArray array = new JSONArray();
-        for (CardMessage message : messages) {
-            array.put(message.toJSON());
-        }
-        return array;
+        return messages;
     }
 
     public CardMessageBuilder append(CardMessage message) {
-        this.messages.add(message);
+        this.messages.put(message.toJSON());
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return build().toString();
     }
 }

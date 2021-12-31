@@ -44,7 +44,6 @@ public class MessageExtra extends RabbitObject {
 
     public static PersonalMessageExtra buildPersonalMessageExtra(RabbitImpl rabbit, JsonNode node) {
         PersonalMessageExtra r = new PersonalMessageExtra(rabbit);
-        System.out.println(node.toString());
         JsonNode extra = node.get("extra");
         r.type = extra.get("type").asInt();
         r.chatCode = extra.get("code").asText();

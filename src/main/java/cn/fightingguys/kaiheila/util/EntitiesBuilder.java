@@ -83,7 +83,6 @@ public class EntitiesBuilder extends RabbitObject {
     }
 
     private ChannelEntity buildChannelEntityBase(JsonNode node, boolean isUpdate) {
-        System.out.println(node.toString());
         ChannelEntity channel = new ChannelEntity(getRabbitImpl());
         channel.setId(node.get("id").asText());
         channel.setType(node.get("type").asInt());

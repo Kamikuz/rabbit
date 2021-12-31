@@ -16,6 +16,7 @@
 
 package cn.fightingguys.kaiheila;
 
+import cn.fightingguys.kaiheila.api.Guild;
 import cn.fightingguys.kaiheila.api.SelfUser;
 import cn.fightingguys.kaiheila.cache.CacheManager;
 import cn.fightingguys.kaiheila.client.http.HttpCall;
@@ -175,5 +176,10 @@ public class RabbitImpl implements Rabbit {
 
     public IWebSocketClient getWebsocketClient() {
         return websocketClient;
+    }
+
+    @Override
+    public Guild getGuild(String id) {
+        return getCacheManager().getGuildCache().getElementById(id);
     }
 }

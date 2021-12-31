@@ -94,7 +94,7 @@ public class CacheManager extends RabbitObject {
                 String guildId = item.get("id").asText();
                 fetchGuildData(guildId);
                 fetchGuildMemberData(guildId);
-//                fetchGuildEmojiData(guildId);
+                fetchGuildEmojiData(guildId);
             }
         }
     }

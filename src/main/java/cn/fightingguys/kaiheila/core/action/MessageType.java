@@ -1,4 +1,4 @@
-package cn.fightingguys.kaiheila.core.action.message;
+package cn.fightingguys.kaiheila.core.action;
 
 public enum MessageType {
   TEXT(1),

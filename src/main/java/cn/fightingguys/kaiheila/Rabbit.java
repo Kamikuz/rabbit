@@ -16,6 +16,7 @@
 
 package cn.fightingguys.kaiheila;
 
+import cn.fightingguys.kaiheila.api.Guild;
 import cn.fightingguys.kaiheila.api.SelfUser;
 import cn.fightingguys.kaiheila.hook.EventListener;
 
@@ -128,4 +129,5 @@ public interface Rabbit {
         return Version.MAJOR_VERSION * 10000 + Version.MINOR_VERSION * 100 + Version.PATCH_VERSION;
     }
 
+    Guild getGuild(String id);
 }
