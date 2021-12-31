@@ -15,6 +15,8 @@ public class Configuration {
     private final ClientConfigurer clientConfigurer;
     private final EventSourceConfigurer eventSourceConfigurer;
 
+    public static boolean isDebug;
+
     public Configuration(SdkConfigurer sdkConfigurer, ClientConfigurer clientConfigurer, ApiConfigurer apiConfigurer, EventSourceConfigurer eventSourceConfigurer) {
         this.sdkConfigurer = sdkConfigurer;
         this.clientConfigurer = clientConfigurer;

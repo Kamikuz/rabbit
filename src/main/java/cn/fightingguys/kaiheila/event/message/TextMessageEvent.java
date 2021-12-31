@@ -54,13 +54,28 @@ public class TextMessageEvent extends AbstractEvent {
         this.extra = MessageExtra.buildMessageExtra(rabbit, node);
     }
 
-    @Override
-    public Operation action() {
-        return type == Type.Person ? new Operation.UserOperation(getRabbitImpl(), getEventAuthorId()) : new Operation.ServerOperation(getRabbitImpl(), getEventAuthorId(), (MessageExtra.ChannelMessageExtra) extra);
+    protected TextMessageEvent(RabbitImpl rabbit, TextMessageEvent event) {
+        super(rabbit, event);
+        this.type = event.type;
+        this.extra = event.extra;
+        this.messageID = event.messageID;
     }
 
-    public MessageExtra getExtra() {
-        return extra;
+    @Override
+    public Operation.ChatOperation action() {
+        return new Operation.ChatOperation(getRabbitImpl(),this);
+    }
+
+    protected MessageExtra getExtra(){
+        return this.extra;
+    };
+
+    public PrivateMessageEvent asPrivateMessageEvent(){
+        return new PrivateMessageEvent(getRabbitImpl(),this);
+    }
+
+    public ChannelMessageEvent asChannelMessageEvent(){
+        return new ChannelMessageEvent(getRabbitImpl(),this);
     }
 
     public Channel getChannel() {
@@ -70,5 +85,29 @@ public class TextMessageEvent extends AbstractEvent {
     @Override
     public IEvent handleSystemEvent(JsonNode body) {
         return this;
+    }
+
+    public static class PrivateMessageEvent extends TextMessageEvent {
+
+        public PrivateMessageEvent(RabbitImpl rabbit, TextMessageEvent event) {
+            super(rabbit, event);
+        }
+
+        @Override
+        public MessageExtra.PersonalMessageExtra getExtra() {
+            return (MessageExtra.PersonalMessageExtra) super.getExtra();
+        }
+    }
+
+    public static class ChannelMessageEvent extends TextMessageEvent {
+
+        public ChannelMessageEvent(RabbitImpl rabbit, TextMessageEvent event) {
+            super(rabbit, event);
+        }
+
+        @Override
+        public MessageExtra.ChannelMessageExtra getExtra() {
+            return (MessageExtra.ChannelMessageExtra) super.getExtra();
+        }
     }
 }

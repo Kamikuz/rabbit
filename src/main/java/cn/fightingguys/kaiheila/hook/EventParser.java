@@ -74,35 +74,46 @@ public class EventParser extends RabbitObject implements Runnable {
         this.listeners.forEach(eventListener -> eventListener.handle(getRabbitImpl(), event));
     }
 
+    private boolean isBotEvent(JsonNode data){
+        return data.get("nonce").asText().toLowerCase().equals("bot-message");
+    }
+
     private IEvent createEventObject(JsonNode dataNode) {
         int type = dataNode.get("type").asInt();
-        if (type == 255) {
-            String sType = dataNode.get("extra").get("type").asText();
-            Class<? extends IEvent> clazz = eventClasses.get(sType);
-            try {
-                IEvent event = clazz.getConstructor(RabbitImpl.class, JsonNode.class).newInstance(getRabbitImpl(), dataNode);
-                return event.handleSystemEvent(dataNode);
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                Log.error(e.getMessage());
-                return new FailureEvent(getRabbitImpl(), dataNode, e);
+        try{
+            if (type == 255) {
+                String sType = dataNode.get("extra").get("type").asText();
+                Class<? extends IEvent> clazz = eventClasses.get(sType);
+                try {
+                    IEvent event = clazz.getConstructor(RabbitImpl.class, JsonNode.class).newInstance(getRabbitImpl(), dataNode);
+                    Log.info("系统事件解析成功 [{}]", event.getClass().getSimpleName());
+                    return event.handleSystemEvent(dataNode);
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                    e.printStackTrace();
+                    return new FailureEvent(getRabbitImpl(), dataNode, e);
+                }
             }
-        }
-        switch (type) {
-            case 1:
-                return new TextMessageEvent(getRabbitImpl(), dataNode);
-            case 2:
-                return new ImageMessageEvent(getRabbitImpl(), dataNode);
-            case 3:
-                return new VideoMessageEvent(getRabbitImpl(), dataNode);
-            case 4:
-            case 8:
-                return new FileMessageEvent(getRabbitImpl(), dataNode);
-            case 9:
-                return new MarkDownMessageEvent(getRabbitImpl(), dataNode);
-            case 10:
-                return new CardMessageEvent(getRabbitImpl(), dataNode);
-            default:
-                return new UnknownEvent(getRabbitImpl(), dataNode);
+            switch (type) {
+                case 1:
+                    if (isBotEvent(dataNode)) return new BotMessageEvent(getRabbitImpl(),dataNode);
+                    return new TextMessageEvent(getRabbitImpl(), dataNode);
+                case 2:
+                    return new ImageMessageEvent(getRabbitImpl(), dataNode);
+                case 3:
+                    return new VideoMessageEvent(getRabbitImpl(), dataNode);
+                case 4:
+                case 8:
+                    return new FileMessageEvent(getRabbitImpl(), dataNode);
+                case 9:
+                    return new MarkDownMessageEvent(getRabbitImpl(), dataNode);
+                case 10:
+                    return new CardMessageEvent(getRabbitImpl(), dataNode);
+                default:
+                    return new UnknownEvent(getRabbitImpl(), dataNode);
+            }
+        }catch (Exception e){
+         Log.error("事件解析失败 [{}]", dataNode);
+            return new FailureEvent(getRabbitImpl(), dataNode, e);
         }
     }
 

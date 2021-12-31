@@ -48,6 +48,18 @@ public abstract class AbstractEvent extends RabbitObject implements IEvent {
         this.eventNonce = node.get("nonce").asText();
     }
 
+    protected AbstractEvent(RabbitImpl rabbit, AbstractEvent event) {
+        super(rabbit);
+        this.eventChannelType = event.eventChannelType;
+        this.eventType = event.eventType;
+        this.eventTargetId = event.eventTargetId;
+        this.eventAuthorId = event.eventAuthorId;
+        this.eventContent = event.eventContent;
+        this.eventId = event.eventId;
+        this.eventTime = event.eventTime;
+        this.eventNonce = event.eventNonce;
+    }
+
     public JsonNode getEventExtraBody(JsonNode node) {
         return node.get("extra").get("body");
     }

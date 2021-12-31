@@ -2,6 +2,7 @@ package cn.fightingguys.kaiheila.hook.source.websocket;
 
 import cn.fightingguys.kaiheila.client.ws.IWebSocketContext;
 import cn.fightingguys.kaiheila.client.ws.IWebSocketListener;
+import cn.fightingguys.kaiheila.config.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,6 +51,7 @@ public class WebSocketEventSourceHandle extends IWebSocketListener implements Ru
             Log.error("WebSocket 数据包解压失败", e);
             return;
         }
+        if (Configuration.isDebug) Log.info("收到 WebSocket 数据包\n{}", new String(buffer.array(), StandardCharsets.UTF_8));
         eventSource.transfer(new String(buffer.array(), StandardCharsets.UTF_8));
     }
 
@@ -93,7 +95,7 @@ public class WebSocketEventSourceHandle extends IWebSocketListener implements Ru
             delay = (1L << ++this.eventSource.pingRetryTimes) - duration;
         }
         delay = delay < 0 ? 0 : delay;
-        Log.debug("下次发送 PING 数据包剩余 {} 秒", delay);
+        if (Configuration.isDebug) Log.debug("下次发送 PING 数据包剩余 {} 秒", delay);
         return delay;
     }
 
@@ -110,7 +112,7 @@ public class WebSocketEventSourceHandle extends IWebSocketListener implements Ru
 
     private void sendReportPing() throws InterruptedException {
         String ping = "{\"s\": 2, \"sn\": " + this.eventSource.session.getSn() + "}";
-        Log.debug("当前发送 PING SN 为 {}", this.eventSource.session.getSn());
+        if (Configuration.isDebug) Log.debug("当前发送 PING SN 为 {}", this.eventSource.session.getSn());
         this.client.sendTextMessage(ping);
         this.eventSource.pingTime = LocalDateTime.now();
         if (this.receiveTimeout()) {
@@ -135,7 +137,7 @@ public class WebSocketEventSourceHandle extends IWebSocketListener implements Ru
     public void run() {
         LockSupport.park();
         if (this.receiveHelloTimeout()) {
-            Log.debug("{} 已关闭", Thread.currentThread().getName());
+            if (Configuration.isDebug) Log.debug("{} 已关闭", Thread.currentThread().getName());
             return;
         }
         while (!this.client.isClosed() && !Thread.currentThread().isInterrupted()) {
@@ -143,10 +145,10 @@ public class WebSocketEventSourceHandle extends IWebSocketListener implements Ru
                 TimeUnit.SECONDS.sleep(this.pingDelay());
                 this.sendReportPing();
             } catch (InterruptedException ignored) {
-                Log.debug("{} 被关闭", Thread.currentThread().getName());
+                Log.warn("{} 被关闭", Thread.currentThread().getName());
                 break;
             }
         }
-        Log.debug("{} 已关闭", Thread.currentThread().getName());
+        if (Configuration.isDebug) Log.debug("{} 已关闭", Thread.currentThread().getName());
     }
 }

@@ -56,9 +56,6 @@ public class UpdatedChannelEvent extends AbstractEvent {
     @Override
     public IEvent handleSystemEvent(JsonNode body) {
         JsonNode node = super.getEventExtraBody(body);
-        if (getEventType(body).asText().equals("updated_channel")) {
-
-        }
         ChannelEntity entity = getRabbitImpl().getEntitiesBuilder().buildChannelEntityForEvent(node);
         // 更新缓存
         BaseCache<String, ChannelEntity> channelCache = (BaseCache<String, ChannelEntity>) getRabbitImpl().getCacheManager().getChannelCache();

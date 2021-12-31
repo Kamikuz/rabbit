@@ -1,4 +1,5 @@
 import cn.fightingguys.kaiheila.*;
+import cn.fightingguys.kaiheila.core.action.Operation;
 import cn.fightingguys.kaiheila.event.message.TextMessageEvent;
 import cn.fightingguys.kaiheila.hook.EventListener;
 import org.slf4j.Logger;
@@ -12,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 public class BotApplication {
     public static void main(String[] args) {
         Logger Log = LoggerFactory.getLogger(BotApplication.class);
-        String apiToken = "1/MTA1OTc=/MrU3dGiu2KTjBLVn7wnvjQ==";
+        String apiToken = "";
 
         Log.info("开始启动机器人...");
         Rabbit rabbit = RabbitBuilder.builder()
@@ -51,6 +52,9 @@ public class BotApplication {
             // 监听文本消息事件内容
             if (event.type == TextMessageEvent.Type.Group) Log.info("[{} | {}]{}",event.getChannel().getName(), event.getEventAuthorId().getUsername(), event.getEventContent());
             else Log.info("[{}]{}",event.getEventAuthorId().getUsername(), event.getEventContent());
+
+            Operation.ChatOperation userOperation = (Operation.ChatOperation) event.action();
+            userOperation.reply("你好，我是机器人，请问有什么可以帮助你的吗？");
         }
     }
 }

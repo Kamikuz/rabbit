@@ -50,6 +50,7 @@ public class CacheManager extends RabbitObject {
     }
 
     public boolean checkTokenAvailable() {
+        if (getRabbitImpl().getConfiguration().getApiConfigurer().getToken().isEmpty()) return false;
         try {
             fetchSelfUser();
             if (this.selfUserCache != null) {

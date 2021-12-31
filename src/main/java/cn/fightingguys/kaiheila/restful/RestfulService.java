@@ -16,9 +16,10 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class RestfulService extends RabbitObject {
   protected final Logger Log = LoggerFactory.getLogger(this.getClass());
-  final HttpHeaders defaultHeaders = new HttpHeaders();
+  protected final HttpHeaders defaultHeaders = new HttpHeaders();
   public RestfulService(RabbitImpl rabbit) {
     super(rabbit);
+    if (getRabbitImpl().getConfiguration().getApiConfigurer().getToken().isEmpty()) Log.warn("[数据同步] 未设置token");
     defaultHeaders.addHeader("Authorization", "Bot " + getRabbitImpl().getConfiguration().getApiConfigurer().getToken());
   }
 
@@ -36,6 +37,10 @@ public abstract class RestfulService extends RabbitObject {
     result.add(root);
     result.addAll(getRemainPageRestData(compiledRoute, getRestApiData(root)));
     return result;
+  }
+
+  protected JsonNode getRestActionJsonResponse(HttpCall call) throws InterruptedException {
+    return callRestApi(call);
   }
 
   private JsonNode getRestApiData(JsonNode node) {
@@ -64,7 +69,11 @@ public abstract class RestfulService extends RabbitObject {
     if (!root.has("code")) {
       return true;
     }
-    return root.get("code").asInt() != 0;
+    if (root.get("code").asInt() != 0) {
+      Log.error("[数据同步] API请求失败，错误码：{}, 错误消息{}", root.get("code").asInt(), root.get("message").asText());
+      return true;
+    }
+    return false;
   }
 
   protected void reportRequestFailed(int retryCount, String url) throws InterruptedException {

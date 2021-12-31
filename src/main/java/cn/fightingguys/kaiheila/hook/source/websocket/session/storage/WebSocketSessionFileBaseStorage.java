@@ -61,6 +61,7 @@ public class WebSocketSessionFileBaseStorage implements WebSocketSessionStorage 
     @Override
     public boolean saveSession(WebSocketEventSourceSession session) {
         if (!checkSessionFileWriteable()) {
+            Log.warn("WebSocket Session 文件不可写");
             return false;
         }
         try (FileWriter writer = new FileWriter(file)) {
@@ -96,9 +97,7 @@ public class WebSocketSessionFileBaseStorage implements WebSocketSessionStorage 
 
     @Override
     public void clearSession() {
-        if (file.exists() && file.delete()) {
-            Log.warn("WebSocket Session 文件已删除 [{}]", file.getAbsolutePath());
-        }
+        if (file.exists() && file.delete()) {Log.info("WebSocket Session 文件已删除");}
+        else{Log.warn("WebSocket Session 文件删除失败");}
     }
-
 }
