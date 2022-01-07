@@ -180,6 +180,7 @@ public class RabbitImpl implements Rabbit {
 
     @Override
     public Guild getGuild(String id) {
+        Log.debug("获取公会信息 - " + getCacheManager().getGuildCache().getAll().toString());
         return getCacheManager().getGuildCache().getElementById(id);
     }
 }

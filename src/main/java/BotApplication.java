@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class BotApplication {
     public static void main(String[] args) {
         Logger Log = LoggerFactory.getLogger(BotApplication.class);
-        String apiToken = "";
+        String apiToken = "1/MTA1OTc=/xdFVXmTl2I6FvdsYr/QdOQ==";
 
         Log.info("开始启动机器人...");
         Rabbit rabbit = RabbitBuilder.builder()
@@ -30,6 +30,7 @@ public class BotApplication {
         Log.info("开始登录...");
         if (rabbit.login()) {
             Log.info("登录成功");
+            Log.info(rabbit.getGuild("7106853317977817").getName());
             try {
                 TimeUnit.SECONDS.sleep(Long.MAX_VALUE);
             } catch (InterruptedException e) {

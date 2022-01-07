@@ -16,10 +16,13 @@
 
 package cn.fightingguys.kaiheila.cache;
 
+import java.util.List;
+
 public interface ICacheView<K, T> {
 
     T getElementById(K id);
 
     T getElementByName(String name);
 
+    List<K> getAll();
 }
