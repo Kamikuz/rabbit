@@ -20,6 +20,8 @@ import cn.fightingguys.kaiheila.api.Guild;
 import cn.fightingguys.kaiheila.api.SelfUser;
 import cn.fightingguys.kaiheila.hook.EventListener;
 
+import java.util.List;
+
 /**
  * 开黑啦开放平台控制接口
  */
@@ -130,4 +132,6 @@ public interface Rabbit {
     }
 
     Guild getGuild(String id);
+
+    List<Guild> getGuilds();
 }

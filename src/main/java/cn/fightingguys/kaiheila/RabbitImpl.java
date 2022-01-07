@@ -35,6 +35,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class RabbitImpl implements Rabbit {
     protected static final Logger Log = LoggerFactory.getLogger(RabbitImpl.class);
@@ -180,7 +182,11 @@ public class RabbitImpl implements Rabbit {
 
     @Override
     public Guild getGuild(String id) {
-        Log.debug("获取公会信息 - " + getCacheManager().getGuildCache().getAll().toString());
         return getCacheManager().getGuildCache().getElementById(id);
+    }
+
+    @Override
+    public List<Guild> getGuilds() {
+        return getCacheManager().getGuildCache().getAll().stream().map(id -> getCacheManager().getGuildCache().getElementById(id)).collect(Collectors.toList());
     }
 }
