@@ -66,6 +66,7 @@ public class WebSocketSessionFileBaseStorage implements WebSocketSessionStorage 
         }
         try (FileWriter writer = new FileWriter(file)) {
             writer.write(session.getSessionId() + dataSplit + session.getGateway() + dataSplit + session.getSn());
+            writer.flush();
         } catch (IOException e) {
             return false;
         }
@@ -84,15 +85,17 @@ public class WebSocketSessionFileBaseStorage implements WebSocketSessionStorage 
         BufferedReader reader = new BufferedReader(fileReader);
         try {
             dataLine = reader.readLine();
+            String[] data = dataLine.split(dataSplit);
+            WebSocketEventSourceSession session = new WebSocketEventSourceSession();
+            session.setSessionId(data[0]);
+            session.setGateway(data[1]);
+            session.setSn(Integer.parseInt(data[2]));
+            reader.close();
+            fileReader.close();
+            return session;
         } catch (IOException ignored) {
             return null;
         }
-        String[] data = dataLine.split(dataSplit);
-        WebSocketEventSourceSession session = new WebSocketEventSourceSession();
-        session.setSessionId(data[0]);
-        session.setGateway(data[1]);
-        session.setSn(Integer.parseInt(data[2]));
-        return session;
     }
 
     @Override
