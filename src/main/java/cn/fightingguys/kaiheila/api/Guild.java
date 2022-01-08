@@ -1,6 +1,9 @@
 package cn.fightingguys.kaiheila.api;
 
 import cn.fightingguys.kaiheila.core.action.Operation;
+import cn.fightingguys.kaiheila.entity.MemberEntity;
+
+import java.util.List;
 
 /**
  * 服务器
@@ -115,4 +118,8 @@ public interface Guild {
      * @return 服务器操作
      */
     Operation.ServerOperation getServerOperation();
+
+    List<Channel> getChannels();
+
+    List<MemberEntity> getMembers();
 }

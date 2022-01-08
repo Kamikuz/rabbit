@@ -58,7 +58,7 @@ public class DeletedGuildEvent extends AbstractEvent {
         for (Integer role : guildEntity.getRoles()) {
             ((BaseCache<Integer, RoleEntity>) cacheManager.getRoleCache()).unloadElementById(role);
         }
-        for (String channel : guildEntity.getChannels()) {
+        for (String channel : guildEntity.getChannelIDs()) {
             ((BaseCache<String, ChannelEntity>) cacheManager.getChannelCache()).unloadElementById(channel);
         }
         for (String emoji : guildEntity.getEmojis()) {

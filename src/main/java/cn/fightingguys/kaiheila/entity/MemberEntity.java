@@ -2,6 +2,7 @@ package cn.fightingguys.kaiheila.entity;
 
 import cn.fightingguys.kaiheila.RabbitImpl;
 import cn.fightingguys.kaiheila.core.RabbitObject;
+import cn.fightingguys.kaiheila.core.action.Operation;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -6,6 +6,7 @@ import cn.fightingguys.kaiheila.entity.cardmessage.CardMessage;
 import cn.fightingguys.kaiheila.entity.cardmessage.CardMessageBuilder;
 import cn.fightingguys.kaiheila.event.message.TextMessageEvent;
 import cn.fightingguys.kaiheila.hook.EventListener;
+import cn.fightingguys.kaiheila.restful.RestRoute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +32,8 @@ public class BotApplication {
         if (rabbit.login()) {
             Log.info("登录成功");
             try {
-                TimeUnit.SECONDS.sleep(Long.MAX_VALUE);
+                TimeUnit.SECONDS.sleep(10);
+                rabbit.shutdown();
             } catch (InterruptedException e) {
                 rabbit.shutdown();
             }

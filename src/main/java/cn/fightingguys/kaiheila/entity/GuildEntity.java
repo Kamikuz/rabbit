@@ -5,7 +5,9 @@ import cn.fightingguys.kaiheila.api.*;
 import cn.fightingguys.kaiheila.core.RabbitObject;
 import cn.fightingguys.kaiheila.core.action.Operation;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GuildEntity extends RabbitObject implements Guild {
 
@@ -266,7 +268,16 @@ public class GuildEntity extends RabbitObject implements Guild {
         this.roles = roles;
     }
 
-    public List<String> getChannels() {
+    public List<Channel> getChannels() {
+        return channels.stream().map(id-> (Channel) getRabbitImpl().getCacheManager().getChannelCache().getElementById(id)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MemberEntity> getMembers() {
+        return new ArrayList<>(getRabbitImpl().getCacheManager().getGuildMembersCache().get(this.id).values());
+    }
+
+    public List<String> getChannelIDs() {
         return channels;
     }
 

@@ -18,12 +18,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
 
 public class WebSocketEventSourceHandle extends IWebSocketListener implements Runnable {
+    protected static WebSocketEventSourceHandle INSTANCE;
     protected static final Logger Log = LoggerFactory.getLogger(WebSocketEventSourceHandle.class);
 
     private final WebSocketEventSource eventSource;
     private IWebSocketContext client;
 
     public WebSocketEventSourceHandle(WebSocketEventSource eventSource) {
+        INSTANCE = this;
         this.eventSource = eventSource;
         this.eventSource.senderThread = new Thread(this, "WebSocketSenderThread");
         this.eventSource.senderThread.start();
@@ -150,5 +152,11 @@ public class WebSocketEventSourceHandle extends IWebSocketListener implements Ru
             }
         }
         if (Configuration.isDebug) Log.debug("{} 已关闭", Thread.currentThread().getName());
+    }
+
+    @Override
+    public void onClosing(IWebSocketContext client, int code, String reason) {
+        super.onClosing(client, code, reason);
+        client.closeWebSocket(1000, "正常关闭");
     }
 }

@@ -70,5 +70,4 @@ public interface Channel {
      * @return 服务器实例
      */
     Guild getGuild();
-
 }

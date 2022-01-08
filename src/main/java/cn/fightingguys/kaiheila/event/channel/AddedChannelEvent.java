@@ -62,7 +62,7 @@ public class AddedChannelEvent extends AbstractEvent {
         // 更新缓存
         CacheManager cacheManager = getRabbitImpl().getCacheManager();
         GuildEntity guild = cacheManager.getGuildCache().getElementById(guildId);
-        guild.getChannels().add(entity.getId());
+        guild.getChannelIDs().add(entity.getId());
         ((BaseCache<String, ChannelEntity>) cacheManager.getChannelCache()).updateElementById(entity.getId(), entity);
         return this;
     }
