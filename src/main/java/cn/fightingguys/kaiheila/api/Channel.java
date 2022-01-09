@@ -1,5 +1,7 @@
 package cn.fightingguys.kaiheila.api;
 
+import cn.fightingguys.kaiheila.core.action.Operation;
+
 /**
  * 服务器表情，用户可以创建文本频道或语言频道
  */
@@ -70,4 +72,6 @@ public interface Channel {
      * @return 服务器实例
      */
     Guild getGuild();
+
+    Operation.ChannelOperation getChannelOperation();
 }

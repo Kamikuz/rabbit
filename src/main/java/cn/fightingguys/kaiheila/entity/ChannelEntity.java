@@ -5,6 +5,7 @@ import cn.fightingguys.kaiheila.api.Channel;
 import cn.fightingguys.kaiheila.api.Guild;
 import cn.fightingguys.kaiheila.api.User;
 import cn.fightingguys.kaiheila.core.RabbitObject;
+import cn.fightingguys.kaiheila.core.action.Operation;
 
 import java.util.List;
 
@@ -117,6 +118,11 @@ public class ChannelEntity extends RabbitObject implements Channel {
     @Override
     public Guild getGuild() {
         return getRabbitImpl().getCacheManager().getGuildCache().getElementById(guildId);
+    }
+
+    @Override
+    public Operation.ChannelOperation getChannelOperation() {
+        return new Operation.ChannelOperation(getRabbitImpl(), this);
     }
 
     public void setId(String id) {
