@@ -31,7 +31,7 @@ public abstract class Operation extends RestfulService {
       this.message = message;
     }
 
-    public ChatOperation replyOnChannel(String content, boolean isTemp, boolean isReply) {
+    public OperationResult replyOnChannel(String content, boolean isTemp, boolean isReply) {
       Log.info("Reply on channel {}", message.getChannel().getName());
       if (message.type == TextMessageEvent.Type.Group) {
         HttpCall req = RequestBuilder.create(getRabbitImpl(), RestRoute.ChannelMessage.SEND_CHANNEL_MESSAGE)
@@ -43,16 +43,17 @@ public abstract class Operation extends RestfulService {
             .build();
         try{
           JsonNode data = getRestActionJsonResponse(req);
-          if (handleResult(data)) Log.info("Successfully reply message to channel {} @ {}", message.getChannel().getName(), message.getEventAuthorId().getFullName());
-          else Log.error("Failed reply message to channel {} @ {}, reason: {}", message.getChannel().getName(), message.getEventAuthorId().getFullName(), data.get("message").asText());
+          if (handleResult(data)) return OperationResult.SUCCESS.setAction(this).setResult(data.get("data"));
+          else return OperationResult.FAILED;
         } catch (InterruptedException e) {
           e.printStackTrace();
+          return OperationResult.FAILED;
         }
       }
-      return this;
+      return OperationResult.FAILED;
     }
 
-    public ChatOperation replyOnPerson(String content, boolean isReply) {
+    public OperationResult replyOnPerson(String content, boolean isReply) {
       Log.info("Reply on person {}", message.getEventAuthorId().getFullName());
       if (message.type == TextMessageEvent.Type.Person) {
         HttpCall req = RequestBuilder.create(getRabbitImpl(), RestRoute.DirectMessage.SEND_DIRECT_MESSAGE)
@@ -63,16 +64,17 @@ public abstract class Operation extends RestfulService {
             .build();
         try{
           JsonNode data = getRestActionJsonResponse(req);
-          if (handleResult(data)) Log.info("Successfully reply message to {}", message.asPrivateMessageEvent().getExtra().getAuthor().getFullName());
-          else Log.error("Failed to reply message to {}, reason: {}", message.asPrivateMessageEvent().getExtra().getAuthor().getFullName(), data.get("message").asText());
+          if (handleResult(data)) return OperationResult.SUCCESS.setAction(this).setResult(data.get("data"));
+          else return OperationResult.FAILED;
         } catch (InterruptedException e) {
           e.printStackTrace();
+          return OperationResult.FAILED;
         }
       }
-      return this;
+      return OperationResult.FAILED;
     }
 
-    public ChatOperation replyOnChannel(CardMessageBuilder content, boolean isTemp, boolean isReply) {
+    public OperationResult replyOnChannel(CardMessageBuilder content, boolean isTemp, boolean isReply) {
       Log.info("Reply on channel {}", message.getChannel().getName());
       if (message.type == TextMessageEvent.Type.Group) {
         HttpCall req = RequestBuilder.create(getRabbitImpl(), RestRoute.ChannelMessage.SEND_CHANNEL_MESSAGE)
@@ -85,16 +87,17 @@ public abstract class Operation extends RestfulService {
             .build();
         try{
           JsonNode data = getRestActionJsonResponse(req);
-          if (handleResult(data)) Log.info("Successfully reply message to channel {} @ {}", message.getChannel().getName(), message.getEventAuthorId().getFullName());
-          else Log.error("Failed reply message to channel {} @ {}, reason: {}", message.getChannel().getName(), message.getEventAuthorId().getFullName(), data.get("message").asText());
+          if (handleResult(data)) return OperationResult.SUCCESS.setAction(this).setResult(data.get("data"));
+          else return OperationResult.FAILED;
         } catch (InterruptedException e) {
           e.printStackTrace();
+          return OperationResult.FAILED;
         }
       }
-      return this;
+      return OperationResult.FAILED;
     }
 
-    public ChatOperation replyOnPerson(CardMessageBuilder content, boolean isReply) {
+    public OperationResult replyOnPerson(CardMessageBuilder content, boolean isReply) {
       Log.info("Reply on person {}", message.getEventAuthorId().getFullName());
       if (message.type == TextMessageEvent.Type.Person) {
         HttpCall req = RequestBuilder.create(getRabbitImpl(), RestRoute.DirectMessage.SEND_DIRECT_MESSAGE)
@@ -106,16 +109,17 @@ public abstract class Operation extends RestfulService {
             .build();
         try{
           JsonNode data = getRestActionJsonResponse(req);
-          if (handleResult(data)) Log.info("Successfully reply message to {}", message.asPrivateMessageEvent().getExtra().getAuthor().getFullName());
-          else Log.error("Failed to reply message to {}, reason: {}", message.asPrivateMessageEvent().getExtra().getAuthor().getFullName(), data.get("message").asText());
+          if (handleResult(data)) return OperationResult.SUCCESS.setAction(this).setResult(data.get("data"));
+          else return OperationResult.FAILED;
         } catch (InterruptedException e) {
           e.printStackTrace();
+          return OperationResult.FAILED;
         }
       }
-      return this;
+      return OperationResult.FAILED;
     }
 
-    public ChatOperation replyOnChannel(KMarkdown kMarkdown, boolean isTemp, boolean isReply) {
+    public OperationResult replyOnChannel(KMarkdown kMarkdown, boolean isTemp, boolean isReply) {
       Log.info("Reply on channel {}", message.getChannel().getName());
       if (message.type == TextMessageEvent.Type.Group) {
         HttpCall req = RequestBuilder.create(getRabbitImpl(), RestRoute.ChannelMessage.SEND_CHANNEL_MESSAGE)
@@ -128,16 +132,17 @@ public abstract class Operation extends RestfulService {
             .build();
         try{
           JsonNode data = getRestActionJsonResponse(req);
-          if (handleResult(data)) Log.info("Successfully reply message to channel {} @ {}", message.getChannel().getName(), message.getEventAuthorId().getFullName());
-          else Log.error("Failed reply message to channel {} @ {}, reason: {}", message.getChannel().getName(), message.getEventAuthorId().getFullName(), data.get("message").asText());
+          if (handleResult(data)) return OperationResult.SUCCESS.setAction(this).setResult(data.get("data"));
+          else return OperationResult.FAILED;
         } catch (InterruptedException e) {
           e.printStackTrace();
+          return OperationResult.FAILED;
         }
       }
-      return this;
+      return OperationResult.FAILED;
     }
 
-    public ChatOperation replyOnPerson(KMarkdown kMarkdown, boolean isReply) {
+    public OperationResult replyOnPerson(KMarkdown kMarkdown, boolean isReply) {
       Log.info("Reply on person {}", message.getEventAuthorId().getFullName());
       if (message.type == TextMessageEvent.Type.Person) {
         HttpCall req = RequestBuilder.create(getRabbitImpl(), RestRoute.DirectMessage.SEND_DIRECT_MESSAGE)
@@ -149,30 +154,31 @@ public abstract class Operation extends RestfulService {
             .build();
         try{
           JsonNode data = getRestActionJsonResponse(req);
-          if (handleResult(data)) Log.info("Successfully reply message to {}", message.asPrivateMessageEvent().getExtra().getAuthor().getFullName());
-          else Log.error("Failed to reply message to {}, reason: {}", message.asPrivateMessageEvent().getExtra().getAuthor().getFullName(), data.get("message").asText());
+          if (handleResult(data)) return OperationResult.SUCCESS.setAction(this).setResult(data.get("data"));
+          else return OperationResult.FAILED;
         } catch (InterruptedException e) {
           e.printStackTrace();
+          return OperationResult.FAILED;
         }
       }
-      return this;
+      return OperationResult.FAILED;
     }
 
-    public ChatOperation reply(String content) {
+    public OperationResult reply(String content) {
       if (message.type == TextMessageEvent.Type.Group) {
         return replyOnChannel(content, false, false);
       }
       return replyOnPerson(content, false);
     }
 
-    public ChatOperation reply(CardMessageBuilder cardMessage) {
+    public OperationResult reply(CardMessageBuilder cardMessage) {
       if (message.type == TextMessageEvent.Type.Group) {
         return replyOnChannel(cardMessage, false, false);
       }
       return replyOnPerson(cardMessage, false);
     }
 
-    public ChatOperation reply(KMarkdown kMarkdown) {
+    public OperationResult reply(KMarkdown kMarkdown) {
       if (message.type == TextMessageEvent.Type.Group) {
         return replyOnChannel(kMarkdown, false, false);
       }
@@ -213,7 +219,7 @@ public abstract class Operation extends RestfulService {
       this.channel = channel;
     }
 
-    public UserOperation sendMessage(String message) {
+    public OperationResult sendMessage(String message) {
       HttpCall req = RequestBuilder.create(getRabbitImpl(), RestRoute.DirectMessage.SEND_DIRECT_MESSAGE)
           .withData("target_id", user.getId())
           .withData("nonce", "bot-message")
@@ -221,17 +227,15 @@ public abstract class Operation extends RestfulService {
           .build();
       try{
         JsonNode data = getRestActionJsonResponse(req);
-        Log.debug("{}", data);
-        if (handleResult(data)) Log.info("Successfully send message to user: " + user.getFullName());
-        else Log.error("Failed to send message to user: {}. Reason: {}",user.getFullName() ,data.get("message").asText());
+        if (handleResult(data)) return OperationResult.SUCCESS.setAction(this).setResult(data.get("data"));
+        else return OperationResult.FAILED;
       } catch (InterruptedException e) {
         e.printStackTrace();
-        Log.error("Failed to send message to user: {}",user.getFullName());
+        return OperationResult.FAILED;
       }
-      return this;
     }
 
-    public UserOperation reply(String message, String msgId) {
+    public OperationResult reply(String message, String msgId) {
       HttpCall req = RequestBuilder.create(getRabbitImpl(), RestRoute.DirectMessage.SEND_DIRECT_MESSAGE)
           .withData("target_id", user.getId())
           .withData("nonce", "bot-message")
@@ -240,27 +244,27 @@ public abstract class Operation extends RestfulService {
           .build();
       try{
         JsonNode data = getRestActionJsonResponse(req);
-        if (handleResult(data)) Log.info("Successfully reply message to user: " + user.getFullName());
-        else Log.error("Failed to reply message to user: {}. Reason: {}",user.getFullName() ,data.get("message").asText());
+        if (handleResult(data)) return OperationResult.SUCCESS.setAction(this).setResult(data.get("data"));
+        else return OperationResult.FAILED;
       } catch (InterruptedException e) {
         e.printStackTrace();
+        return OperationResult.FAILED;
       }
-      return this;
     }
 
-    public UserOperation updateIntimacy(int value) {
+    public OperationResult updateIntimacy(int value) {
       RestRoute.CompiledRoute route = RestRoute.Intimacy.UPDATE_USER_INTIMACY.compile()
           .withQueryParam("user_id", user.getId())
           .withQueryParam("score", value);
       HttpCall req = HttpCall.createRequest(route.getMethod(), getCompleteUrl(route), this.defaultHeaders);
       try{
         JsonNode data = getRestActionJsonResponse(req);
-        if (handleResult(data)) Log.info("Successfully update user[{}] intimacy!",user.getFullName());
-        else Log.error("Failed to update user[{}] intimacy! Reason: {}",user.getFullName() ,data.get("message").asText());
+        if (handleResult(data)) return OperationResult.SUCCESS.setAction(this).setResult(data.get("data"));
+        else return OperationResult.FAILED;
       } catch (InterruptedException e) {
         e.printStackTrace();
+        return OperationResult.FAILED;
       }
-      return this;
     }
 
     public int getUserIntimacy(){
@@ -340,7 +344,7 @@ public abstract class Operation extends RestfulService {
       this.guild = guild;
     }
 
-    public void grantUser(String uid){
+    public OperationResult grantUser(String uid){
       HttpCall req = RequestBuilder.create(getRabbitImpl(), RestRoute.GuildRole.GRANT_GUILD_ROLE)
           .withData("guild_id", guild.getId())
           .withData("user_id", uid)
@@ -348,14 +352,15 @@ public abstract class Operation extends RestfulService {
           .build();
       try{
         JsonNode data = getRestActionJsonResponse(req);
-        if (handleResult(data)) Log.info("Successfully grant role '{}' to user", role.getName());
-        else Log.error("Failed to grant role '{}' to user. Reason: {}", role.getName() ,data.get("message").asText());
+        if (handleResult(data)) return OperationResult.SUCCESS.setAction(this).setResult(data.get("data"));
+        else return OperationResult.FAILED;
       } catch (InterruptedException e) {
         e.printStackTrace();
+        return OperationResult.FAILED;
       }
     }
 
-    public void revokeUser(String uid){
+    public OperationResult revokeUser(String uid){
       HttpCall req = RequestBuilder.create(getRabbitImpl(), RestRoute.GuildRole.REVOKE_GUILD_ROLE)
           .withData("guild_id", guild.getId())
           .withData("user_id", uid)
@@ -363,10 +368,11 @@ public abstract class Operation extends RestfulService {
           .build();
       try{
         JsonNode data = getRestActionJsonResponse(req);
-        if (handleResult(data)) Log.info("Successfully revoke role '{}' to user", role.getName());
-        else Log.error("Failed to revoke role '{}' to user. Reason: {}", role.getName() ,data.get("message").asText());
+        if (handleResult(data)) return OperationResult.SUCCESS.setAction(this).setResult(data.get("data"));
+        else return OperationResult.FAILED;
       } catch (InterruptedException e) {
         e.printStackTrace();
+        return OperationResult.FAILED;
       }
     }
   }
@@ -379,7 +385,7 @@ public abstract class Operation extends RestfulService {
       this.channel = channel;
     }
 
-    public ChannelOperation broadcastMessage(String message, boolean kMarkdown){
+    public OperationResult broadcastMessage(String message, boolean kMarkdown){
       HttpCall req = RequestBuilder.create(getRabbitImpl(), RestRoute.ChannelMessage.SEND_CHANNEL_MESSAGE)
           .withData("target_id", channel.getId())
           .withData("nonce", "bot-message")
@@ -388,15 +394,15 @@ public abstract class Operation extends RestfulService {
           .build();
       try{
         JsonNode data = getRestActionJsonResponse(req);
-        if (handleResult(data)) Log.info("Successfully broadcast message to channel {}", channel.getName());
-        else Log.error("Failed to broadcast message to channel {}, reason: {}", channel.getName(), data.get("message").asText());
+        if (handleResult(data)) return OperationResult.SUCCESS.setAction(this).setResult(data.get("data"));
+        else return OperationResult.FAILED;
       } catch (InterruptedException e) {
         e.printStackTrace();
+        return OperationResult.FAILED;
       }
-      return this;
     }
 
-    public ChannelOperation sendTempMessage(String message, String uid, boolean kMarkdown){
+    public OperationResult sendTempMessage(String message, String uid, boolean kMarkdown){
       HttpCall req = RequestBuilder.create(getRabbitImpl(), RestRoute.ChannelMessage.SEND_CHANNEL_MESSAGE)
           .withData("target_id", channel.getId())
           .withData("nonce", "bot-message")
@@ -406,15 +412,15 @@ public abstract class Operation extends RestfulService {
           .build();
       try{
         JsonNode data = getRestActionJsonResponse(req);
-        if (handleResult(data)) Log.info("Successfully send temp message to channel {}", channel.getName());
-        else Log.error("Failed to send temp message to channel {}, reason: {}", channel.getName(), data.get("message").asText());
+        if (handleResult(data)) return OperationResult.SUCCESS.setAction(this).setResult(data.get("data"));
+        else return OperationResult.FAILED;
       } catch (InterruptedException e) {
         e.printStackTrace();
+        return OperationResult.FAILED;
       }
-      return this;
     }
 
-    public ChannelOperation broadcastMessage(CardMessageBuilder message) {
+    public OperationResult broadcastMessage(CardMessageBuilder message) {
       HttpCall req = RequestBuilder.create(getRabbitImpl(), RestRoute.ChannelMessage.SEND_CHANNEL_MESSAGE)
           .withData("target_id", channel.getId())
           .withData("nonce", "bot-message")
@@ -423,15 +429,15 @@ public abstract class Operation extends RestfulService {
           .build();
       try{
         JsonNode data = getRestActionJsonResponse(req);
-        if (handleResult(data)) Log.info("Successfully broadcast message to channel {}", channel.getName());
-        else Log.error("Failed to broadcast message to channel {}, reason: {}", channel.getName(), data.get("message").asText());
+        if (handleResult(data)) return OperationResult.SUCCESS.setAction(this).setResult(data.get("data"));
+        else return OperationResult.FAILED;
       } catch (InterruptedException e) {
         e.printStackTrace();
+        return OperationResult.FAILED;
       }
-      return this;
     }
 
-    public ChannelOperation sendTempMessage(CardMessageBuilder message, String uid){
+    public OperationResult sendTempMessage(CardMessageBuilder message, String uid){
       HttpCall req = RequestBuilder.create(getRabbitImpl(), RestRoute.ChannelMessage.SEND_CHANNEL_MESSAGE)
           .withData("target_id", channel.getId())
           .withData("nonce", "bot-message")
@@ -441,15 +447,15 @@ public abstract class Operation extends RestfulService {
           .build();
       try{
         JsonNode data = getRestActionJsonResponse(req);
-        if (handleResult(data)) Log.info("Successfully send temp message to channel {}", channel.getName());
-        else Log.error("Failed to send temp message to channel {}, reason: {}", channel.getName(), data.get("message").asText());
+        if (handleResult(data)) return OperationResult.SUCCESS.setAction(this).setResult(data.get("data"));
+        else return OperationResult.FAILED;
       } catch (InterruptedException e) {
         e.printStackTrace();
+        return OperationResult.FAILED;
       }
-      return this;
     }
 
-    public ChannelOperation broadcastMessage(KMarkdown message) {
+    public OperationResult broadcastMessage(KMarkdown message) {
       HttpCall req = RequestBuilder.create(getRabbitImpl(), RestRoute.ChannelMessage.SEND_CHANNEL_MESSAGE)
           .withData("target_id", channel.getId())
           .withData("nonce", "bot-message")
@@ -458,15 +464,15 @@ public abstract class Operation extends RestfulService {
           .build();
       try{
         JsonNode data = getRestActionJsonResponse(req);
-        if (handleResult(data)) Log.info("Successfully broadcast message to channel {}", channel.getName());
-        else Log.error("Failed to broadcast message to channel {}, reason: {}", channel.getName(), data.get("message").asText());
+        if (handleResult(data)) return OperationResult.SUCCESS.setAction(this).setResult(data.get("data"));
+        else return OperationResult.FAILED;
       } catch (InterruptedException e) {
         e.printStackTrace();
+        return OperationResult.FAILED;
       }
-      return this;
     }
 
-    public ChannelOperation sendTempMessage(KMarkdown message, String uid){
+    public OperationResult sendTempMessage(KMarkdown message, String uid){
       HttpCall req = RequestBuilder.create(getRabbitImpl(), RestRoute.ChannelMessage.SEND_CHANNEL_MESSAGE)
           .withData("target_id", channel.getId())
           .withData("nonce", "bot-message")
@@ -476,12 +482,12 @@ public abstract class Operation extends RestfulService {
           .build();
       try{
         JsonNode data = getRestActionJsonResponse(req);
-        if (handleResult(data)) Log.info("Successfully send temp message to channel {}", channel.getName());
-        else Log.error("Failed to send temp message to channel {}, reason: {}", channel.getName(), data.get("message").asText());
+        if (handleResult(data)) return OperationResult.SUCCESS.setAction(this).setResult(data.get("data"));
+        else return OperationResult.FAILED;
       } catch (InterruptedException e) {
         e.printStackTrace();
+        return OperationResult.FAILED;
       }
-      return this;
     }
 
     public String createChannelInvite(InviteDuration duration, InviteTimes times){
