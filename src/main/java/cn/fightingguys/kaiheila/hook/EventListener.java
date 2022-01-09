@@ -79,6 +79,7 @@ public abstract class EventListener {
     public void onSelfExitedGuildEvent(Rabbit rabbit, SelfExitedGuildEvent event) {}
     public void onSelfJoinedGuildEvent(Rabbit rabbit, SelfJoinedGuildEvent event) {}
     public void onUserUpdatedEvent(Rabbit rabbit, UserUpdatedEvent event) {}
+    public void onBotMessageEvent(Rabbit rabbit, BotMessageEvent event) {}
     // @formatter:on
 
     public final void handle(RabbitImpl rabbit, IEvent event) {

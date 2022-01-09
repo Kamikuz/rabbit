@@ -7,7 +7,6 @@ import cn.fightingguys.kaiheila.api.Role;
 import cn.fightingguys.kaiheila.api.User;
 import cn.fightingguys.kaiheila.client.http.HttpCall;
 import cn.fightingguys.kaiheila.client.http.RequestBuilder;
-import cn.fightingguys.kaiheila.entity.cardmessage.CardMessage;
 import cn.fightingguys.kaiheila.entity.cardmessage.CardMessageBuilder;
 import cn.fightingguys.kaiheila.entity.kmarkdown.KMarkdown;
 import cn.fightingguys.kaiheila.event.message.TextMessageEvent;
@@ -380,11 +379,12 @@ public abstract class Operation extends RestfulService {
       this.channel = channel;
     }
 
-    public ChannelOperation broadcastMessage(String message) {
+    public ChannelOperation broadcastMessage(String message, boolean kMarkdown){
       HttpCall req = RequestBuilder.create(getRabbitImpl(), RestRoute.ChannelMessage.SEND_CHANNEL_MESSAGE)
           .withData("target_id", channel.getId())
           .withData("nonce", "bot-message")
           .withData("content", message)
+          .withData("type", kMarkdown ? 9 : 1)
           .build();
       try{
         JsonNode data = getRestActionJsonResponse(req);
@@ -396,11 +396,12 @@ public abstract class Operation extends RestfulService {
       return this;
     }
 
-    public ChannelOperation sendTempMessage(String message, String uid){
+    public ChannelOperation sendTempMessage(String message, String uid, boolean kMarkdown){
       HttpCall req = RequestBuilder.create(getRabbitImpl(), RestRoute.ChannelMessage.SEND_CHANNEL_MESSAGE)
           .withData("target_id", channel.getId())
           .withData("nonce", "bot-message")
           .withData("content", message)
+          .withData("type", kMarkdown ? 9 : 1)
           .withData("temp_target_id", uid)
           .build();
       try{

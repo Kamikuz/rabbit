@@ -11,5 +11,4 @@ public interface SelfUser {
      * @return 用户
      */
     User getUser();
-
 }
