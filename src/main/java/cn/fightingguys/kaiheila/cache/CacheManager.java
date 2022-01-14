@@ -1,7 +1,6 @@
 package cn.fightingguys.kaiheila.cache;
 
 import cn.fightingguys.kaiheila.RabbitImpl;
-import cn.fightingguys.kaiheila.api.entity.*;
 import cn.fightingguys.kaiheila.client.http.HttpCall;
 import cn.fightingguys.kaiheila.client.http.HttpHeaders;
 import cn.fightingguys.kaiheila.core.RabbitObject;

@@ -1,7 +1,6 @@
 package cn.fightingguys.kaiheila.util;
 
 import cn.fightingguys.kaiheila.RabbitImpl;
-import cn.fightingguys.kaiheila.api.entity.*;
 import cn.fightingguys.kaiheila.core.RabbitObject;
 import cn.fightingguys.kaiheila.entity.*;
 import com.fasterxml.jackson.databind.JsonNode;
