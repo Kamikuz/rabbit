@@ -1,12 +1,6 @@
 import cn.fightingguys.kaiheila.*;
-import cn.fightingguys.kaiheila.core.action.InviteDuration;
-import cn.fightingguys.kaiheila.core.action.InviteTimes;
-import cn.fightingguys.kaiheila.core.action.Operation;
-import cn.fightingguys.kaiheila.entity.cardmessage.CardMessage;
-import cn.fightingguys.kaiheila.entity.cardmessage.CardMessageBuilder;
 import cn.fightingguys.kaiheila.event.message.TextMessageEvent;
 import cn.fightingguys.kaiheila.hook.EventListener;
-import cn.fightingguys.kaiheila.restful.RestRoute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,17 +52,6 @@ public class BotApplication {
             // 监听文本消息事件内容
             if (event.type == TextMessageEvent.Type.Group) Log.info("[{} | {}]{}",event.getChannel().getName(), event.getEventAuthorId().getUsername(), event.getEventContent());
             else Log.info("[{}]{}",event.getEventAuthorId().getUsername(), event.getEventContent());
-
-            Operation.ChatOperation userOperation = event.action();
-            userOperation.reply(CardMessageBuilder.start().append(
-                CardMessage.create()
-                    .add(CardMessage.Module.Header()
-                        .setText(CardMessage.Element.PlainText.Text()
-                            .setContent("欢迎使用 KaiHeiLa 微信机器人")
-                        )
-                    )
-                )
-            );
         }
     }
 }

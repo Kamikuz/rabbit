@@ -19,7 +19,6 @@ package cn.fightingguys.kaiheila.event.guild;
 import cn.fightingguys.kaiheila.RabbitImpl;
 import cn.fightingguys.kaiheila.api.Guild;
 import cn.fightingguys.kaiheila.cache.BaseCache;
-import cn.fightingguys.kaiheila.cache.ICacheView;
 import cn.fightingguys.kaiheila.core.action.Operation;
 import cn.fightingguys.kaiheila.entity.GuildEntity;
 import cn.fightingguys.kaiheila.event.AbstractEvent;

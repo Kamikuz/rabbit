@@ -19,7 +19,6 @@ package cn.fightingguys.kaiheila.event.role;
 import cn.fightingguys.kaiheila.RabbitImpl;
 import cn.fightingguys.kaiheila.api.Role;
 import cn.fightingguys.kaiheila.cache.BaseCache;
-import cn.fightingguys.kaiheila.cache.ICacheView;
 import cn.fightingguys.kaiheila.core.action.Operation;
 import cn.fightingguys.kaiheila.entity.RoleEntity;
 import cn.fightingguys.kaiheila.event.AbstractEvent;

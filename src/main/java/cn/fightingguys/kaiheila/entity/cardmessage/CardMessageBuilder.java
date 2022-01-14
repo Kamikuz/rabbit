@@ -3,22 +3,28 @@ package cn.fightingguys.kaiheila.entity.cardmessage;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class CardMessageBuilder {
-    private final JSONArray messages = new JSONArray();
+    ArrayList<CardMessage> cardMessages = new ArrayList<>();
 
     public static CardMessageBuilder start() {
         return new CardMessageBuilder();
     }
 
     public JSONArray build() {
-        return messages;
+        return new JSONArray(cardMessages);
     }
 
-    public CardMessageBuilder append(CardMessage message) {
-        this.messages.put(message.toJSON());
-        return this;
+   public CardMessage current(){
+        if (cardMessages.size() == 0) {
+            cardMessages.add(new CardMessage());
+        }
+        return cardMessages.get(cardMessages.size() - 1);
+   }
+
+    public CardMessage append(){
+        cardMessages.add(new CardMessage());
+        return current();
     }
 
     @Override
